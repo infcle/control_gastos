@@ -2,7 +2,7 @@
     <!--Nav Start-->
     <nav class="nav navbar navbar-expand-lg navbar-light iq-navbar">
         <div class="container-fluid navbar-inner">
-            <a href="index.html" class="navbar-brand">
+            <a href="<?php echo BASE_URL; ?>" class="navbar-brand">
                 <!--Logo start-->
                 <!--logo End-->
                 <!--Logo start-->
@@ -259,18 +259,25 @@
                             </div>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="app/user-profile.html">Profile</a></li>
+                            <li><a class="dropdown-item" href="#">Profile</a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="auth/sign-in.html">Logout</a></li>
+                            <li><a class="dropdown-item" href="<?php echo CONTROLLER_URL; ?>login/?logout=1">Logout</a></li>
                         </ul>
                     </li>
                 </ul>
             </div>
         </div>
     </nav> <!-- Nav Header Component Start -->
-    <div class="iq-navbar-header" style="height: 215px;">
+    <div class="iq-navbar-header" style="height: 100px;">
+        <!-- Breadcrumb -->
+        <?php
+        $breadcrumbFile = __DIR__ . '/breadcrumb.php';
+        if (file_exists($breadcrumbFile)) {
+            include $breadcrumbFile;
+        }
+        ?>
 
         <div class="iq-header-img">
             <img src="<?php echo ASSETS_URL; ?>images/top-header.png" alt="header"
