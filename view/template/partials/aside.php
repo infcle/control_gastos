@@ -1,6 +1,6 @@
 <aside class="sidebar sidebar-default sidebar-white sidebar-base navs-rounded-all ">
     <div class="sidebar-header d-flex align-items-center justify-content-start">
-        <a href="index.html" class="navbar-brand">
+        <a href="<?php echo BASE_URL; ?>" class="navbar-brand">
             <!--Logo start-->
             <!--logo End-->
 
@@ -57,7 +57,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="index.html">
+                    <a class="nav-link active" aria-current="page" href="<?php echo BASE_URL; ?>">
                         <i class="icon">
                             <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
                                 class="icon-20">
@@ -160,6 +160,22 @@
                             </svg>
                         </i>
                         <span class="item-name">Admin</span>
+                    </a>
+                </li>
+                <li>
+                    <hr class="hr-horizontal">
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?php echo CONTROLLER_URL; ?>user/">
+                        <i class="icon">
+                            <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                        </i>
+                        <span class="item-name">Users</span>
                     </a>
                 </li>
                 <li>
