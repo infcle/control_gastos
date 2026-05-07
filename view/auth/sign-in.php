@@ -51,12 +51,24 @@
                            <h2 class="mb-2 text-center">Sign In</h2>
                            <p class="text-center">Login to stay connected.</p>
 
-                           <form method="post" action="<?php echo CONTROLLER_URL; ?>login">
+                           <?php if (isset($error_message)): ?>
+                              <div class="alert alert-danger" role="alert">
+                                 <?php echo $error_message; ?>
+                              </div>
+                           <?php endif; ?>
+                           
+                           <?php if (isset($success_message)): ?>
+                              <div class="alert alert-success" role="alert">
+                                 <?php echo $success_message; ?>
+                              </div>
+                           <?php endif; ?>
+
+                           <form method="post" action="<?php echo CONTROLLER_URL; ?>login/index.php">
                               <div class="row">
                                  <div class="col-lg-12">
                                     <div class="form-group">
                                        <label for="user_name" class="form-label">User Name</label>
-                                       <input type="text" class="form-control" id="user_name" name="user_name" aria-describedby="user_name" placeholder="">
+                                       <input type="text" class="form-control" id="user_name" name="user_name" aria-describedby="user_name" placeholder="" value="<?php echo isset($_POST['user_name']) ? htmlspecialchars($_POST['user_name']) : ''; ?>">
                                     </div>
                                  </div>
                                  <div class="col-lg-12">
