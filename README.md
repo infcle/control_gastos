@@ -1,13 +1,15 @@
 # Control de Gastos - Sistema PHP
 
-Un sistema de control de gastos desarrollado en PHP puro con arquitectura MVC.
+Sistema de control de gastos desarrollado en PHP puro con arquitectura MVC.
 
 ## 🚀 Características
 
-- Sistema de login seguro con hash de contraseñas
+- Login seguro con hash de contraseñas (bcrypt)
 - Arquitectura MVC (Modelo-Vista-Controlador)
-- Base de datos MySQL
+- Base de datos MySQL con migraciones versionadas
 - Gestión de roles y usuarios
+- CRUD de productos con historial de precios
+- Eliminación lógica (soft delete)
 - Interfaz moderna con Bootstrap 5
 
 ## 📋 Requisitos
@@ -26,104 +28,95 @@ Un sistema de control de gastos desarrollado en PHP puro con arquitectura MVC.
    ```
 
 2. **Configurar base de datos**
-   - Importar el archivo `script_db/create_tables.sql` en tu MySQL
-   - Actualizar las credenciales en `config/database.php` si es necesario
 
-3. **Configurar servidor web**
-   - Asegurarse que el servidor apunte al directorio `control_gastos`
-   - Configurar URL base en `config/app_config.php` si es diferente
+   Ejecutar los scripts SQL en orden:
+   ```bash
+   mysql -u root -p < script_db/29_04_2026_create_tables.sql
+   mysql -u root -p < script_db/07_05_2026_create_products_table.sql
+   ```
 
-4. **Acceder al sistema**
+3. **Configurar credenciales**
+
+   Editar `config/database.php` si es necesario:
+   ```php
+   define('DB_HOST', 'localhost');
+   define('DB_USER', 'root');
+   define('DB_PASS', 'root123456');  // Tu contraseña
+   define('DB_NAME', 'expense_db');
+   ```
+
+4. **Configurar servidor web**
+   - Apuntar Apache/Nginx al directorio `control_gastos`
+   - Verificar la URL base en `config/app_config.php`
+
+5. **Acceder al sistema**
    - URL: `http://localhost/control_gastos/controller/login/`
-   - Usuario por defecto: `admin`
-   - Contraseña por defecto: `admin123`
+   - Usuario: `admin`
+   - Contraseña: `admin123`
+
+## 🗄️ Migraciones de Base de Datos
+
+Los scripts SQL están versionados por fecha con el formato `DD_MM_YYYY_descripcion.sql`.
+Deben ejecutarse en orden cronológico:
+
+| Orden | Archivo | Descripción |
+|-------|---------|-------------|
+| 1 | `29_04_2026_create_tables.sql` | Crea la BD, tablas `roles` y `users`, e inserta datos iniciales |
+| 2 | `07_05_2026_create_products_table.sql` | Crea tablas `products` y `prices` |
 
 ## 📁 Estructura del Proyecto
 
 ```
 control_gastos/
 ├── config/
-│   ├── app_config.php      # Configuración de rutas y URLs
-│   └── database.php        # Configuración de base de datos
+│   ├── app_config.php          # Configuración de rutas y URLs
+│   └── database.php            # Configuración de base de datos
 ├── controller/
-│   ├── home/
-│   └── login/
-│       └── index.php      # Controlador de login
+│   ├── home/index.php
+│   ├── login/index.php         # Controlador de login
+│   ├── user/index.php          # Controlador de usuarios
+│   └── product/index.php       # Controlador de productos
 ├── model/
-│   └── login/
-│       └── Login.php      # Modelo de login
+│   ├── login/Login.php         # Modelo de login
+│   ├── user/User.php           # Modelo de usuarios
+│   └── product/Product.php     # Modelo de productos
 ├── view/
-│   ├── auth/
-│   │   └── sign-in.php    # Formulario de login
-│   └── assets/           # CSS, JS, imágenes
+│   ├── template/               # Layout y partials compartidos
+│   ├── user/                   # Vistas del módulo de usuarios
+│   ├── product/                # Vistas del módulo de productos
+│   └── assets/                 # CSS, JS, imágenes
 ├── script_db/
-│   └── create_tables.sql  # Script de base de datos
-└── index.php             # Punto de entrada
+│   ├── 29_04_2026_create_tables.sql           # Migración 1: BD base
+│   └── 07_05_2026_create_products_table.sql   # Migración 2: productos
+├── tests/
+│   ├── LoginTest.php           # Tests del modelo de login
+│   ├── UserTest.php            # Tests del modelo de usuarios
+│   └── ProductTest.php         # Tests del modelo de productos
+└── index.php                   # Punto de entrada
 ```
 
 ## 🔐 Seguridad
 
-- Las contraseñas se almacenan con hash bcrypt
-- Consultas SQL con escape de caracteres
-- Sesiones seguras
-- Validación de datos de entrada
+- Contraseñas almacenadas con hash bcrypt (`password_hash`)
+- Valores SQL escapados con `real_escape_string`
+- Salidas HTML protegidas con `htmlspecialchars`
+- Sesiones con validación de rol en cada controlador
 
 ## 👤 Usuarios por Defecto
 
 | Usuario | Contraseña | Rol |
 |---------|------------|-----|
-| admin   | admin123   | Administrator |
+| admin | admin123 | Administrator |
 
-## 🚀 Cómo Levantar el Proyecto
+## 🧪 Ejecutar Pruebas
 
-### 1. Configurar Base de Datos
+Requiere PHP CLI y la base de datos `expense_db` configurada.
+
 ```bash
-# Importar el script SQL en tu MySQL
-mysql -u root -p < script_db/create_tables.sql
-```
-
-### 2. Configurar Credenciales
-Editar `config/database.php` si es necesario:
-```php
-define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASS', 'root123456');  // Tu contraseña
-define('DB_NAME', 'expense_db');
-```
-
-### 3. Configurar Servidor Web
-- Asegurar que Apache/Nginx apunte al directorio `control_gastos`
-- Verificar que `http://localhost/control_gastos/` sea accesible
-
-### 4. Acceder al Sistema
-- URL: `http://localhost/control_gastos/controller/login/`
-- Usuario: `admin`
-- Contraseña: `admin123`
-
-## 🧪 Ejecutar Pruebas Unitarias
-
-### Requisitos para Pruebas
-- PHP CLI instalado
-- Base de datos `expense_db` configurada
-
-### Ejecutar Tests
-```bash
-# Desde la raíz del proyecto
 php tests/LoginTest.php
-
-# Ver resultados esperados:
-# ✅ Valid login test PASSED
-# ✅ Invalid password test PASSED  
-# ✅ Non-existent user test PASSED
-# ✅ Empty username test PASSED
-# 🎉 All tests PASSED!
+php tests/UserTest.php
+php tests/ProductTest.php
 ```
-
-### Qué Prueban los Tests
-1. **Login válido**: Verifica autenticación con credenciales correctas
-2. **Contraseña incorrecta**: Rechaza login con contraseña equivocada
-3. **Usuario inexistente**: Rechaza login con usuario que no existe
-4. **Campos vacíos**: Valida que no se acepten campos vacíos
 
 ## 📝 Licencia
 

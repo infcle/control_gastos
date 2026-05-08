@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../../config/app_config.php';
 session_start();
 
 // Verificar si el usuario está logueado
@@ -13,11 +14,11 @@ if ($_SESSION['rol'] != 'Administrator') {
     exit();
 }
 
-require_once __DIR__ . '/../../config/app_config.php';
 require_once MODEL_PATH . 'user/User.php';
 
 $user = new User();
 $action = isset($_GET['action']) ? $_GET['action'] : 'list';
+
 
 // Set page title and breadcrumb
 $pageTitle = 'Users Management';
@@ -29,14 +30,14 @@ $breadcrumb = [
 switch ($action) {
     case 'list':
         $users = $user->getAllUsers();
-        $pageTitle = 'Users List';
+        $pageTitle = 'Lista de usuarios';
         $breadcrumb[] = ['name' => 'List', 'url' => ''];
         $content = VIEW_PATH . 'user/content-list.php';
         break;
         
     case 'create':
-        $pageTitle = 'Create User';
-        $breadcrumb[] = ['name' => 'Create', 'url' => ''];
+        $pageTitle = 'Nuevo Usuario';
+        $breadcrumb[] = ['name' => 'Crear', 'url' => ''];
         
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $username = $_POST['username'];
