@@ -16,6 +16,7 @@
 
 <!-- Custom Css -->
 <link rel="stylesheet" href="<?php echo ASSETS_URL; ?>css/custom.min.css?v=2.0.0" />
+<link rel="stylesheet" href="<?php echo ASSETS_URL; ?>css/custom.css" />
 
 <!-- Dark Css -->
 <link rel="stylesheet" href="<?php echo ASSETS_URL; ?>css/dark.min.css" />

@@ -561,3 +561,53 @@ body.uikit .btn-download {
 .top-1 {
   top: 1rem;
 }
+
+/* ============================================================
+   Page Header Breadcrumb (iq-navbar-header)
+   ============================================================ */
+.iq-page-header {
+  padding: 1.25rem 0 0.75rem;
+}
+
+.iq-page-header .page-title {
+  color: #ffffff;
+  font-weight: 600;
+  margin-bottom: 0.15rem;
+}
+
+.iq-page-header .page-subtitle {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8125rem;
+  margin-bottom: 0;
+}
+
+/* Breadcrumb items */
+.iq-breadcrumb {
+  margin-bottom: 0;
+  background: transparent;
+  padding: 0;
+}
+
+.iq-breadcrumb .breadcrumb-item a {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  font-size: 0.8125rem;
+  -webkit-transition: color 0.2s ease;
+  -o-transition: color 0.2s ease;
+  transition: color 0.2s ease;
+}
+
+.iq-breadcrumb .breadcrumb-item a:hover {
+  color: #ffffff;
+}
+
+.iq-breadcrumb .breadcrumb-item.active span {
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.8125rem;
+}
+
+/* Separator color on dark background */
+.iq-breadcrumb .breadcrumb-item + .breadcrumb-item::before {
+  color: rgba(255, 255, 255, 0.5);
+}
