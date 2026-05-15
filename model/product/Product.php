@@ -15,253 +15,246 @@ class Product
         }
     }
 
-    /**
-     * Retorna todos los productos activos con su precio actual,
-     * ordenados por fecha de creación descendente.
-     */
-    public function getAllProducts(): array
+    public function getAllProducts()
     {
-        $sql = "SELECT p.id_product, p.name, p.description, p.status, p.created_at,
-                       pr.price
-                FROM   products p
-                JOIN   prices   pr ON p.price_id = pr.id_price
-                WHERE  p.status = 1
-                ORDER  BY p.created_at DESC";
-
+        $sql = "SELECT p.id_product, p.name, p.description, pr.price, p.status, p.created_at, p.updated_at
+                FROM products p 
+                LEFT JOIN prices pr ON p.price_id = pr.id_price 
+                WHERE p.deleted_at IS NULL 
+                ORDER BY p.created_at DESC";
+        
         $result = $this->db_connection->query($sql);
         $products = array();
-
+        
         if ($result) {
             while ($row = $result->fetch_assoc()) {
                 $products[] = $row;
             }
         }
-
+        
         return $products;
     }
 
-    /**
-     * Retorna los datos completos de un producto activo por su ID,
-     * o null si no existe o está inactivo.
-     */
-    public function getProductById(int $id_product): ?array
+    public function getProductById($id_product)
     {
         $id_product = $this->db_connection->real_escape_string($id_product);
-
-        $sql = "SELECT p.id_product, p.name, p.description, p.status, p.created_at,
-                       pr.price
-                FROM   products p
-                JOIN   prices   pr ON p.price_id = pr.id_price
-                WHERE  p.id_product = '$id_product'
-                  AND  p.status = 1";
-
+        $sql = "SELECT p.id_product, p.name, p.description, p.price_id, pr.price, p.status, p.created_at, p.updated_at
+                FROM products p 
+                LEFT JOIN prices pr ON p.price_id = pr.id_price 
+                WHERE p.id_product = '$id_product' AND p.deleted_at IS NULL";
+        
         $result = $this->db_connection->query($sql);
-
+        
         if ($result && $result->num_rows == 1) {
             return $result->fetch_assoc();
         }
-
+        
         return null;
     }
 
-    /**
-     * Crea un nuevo producto con su precio inicial.
-     * Secuencia: INSERT products → last_insert_id() → INSERT prices → last_insert_id() → UPDATE products SET price_id
-     */
-    public function createProduct(string $name, ?string $description, float $price): bool
+    public function getAllPrices()
     {
-        // Validar nombre
-        if (empty(trim($name))) {
-            $this->errors[] = "El nombre del producto es requerido.";
-            return false;
+        $sql = "SELECT id_price, price, created_at FROM prices ORDER BY created_at DESC";
+        $result = $this->db_connection->query($sql);
+        $prices = array();
+        
+        if ($result) {
+            while ($row = $result->fetch_assoc()) {
+                $prices[] = $row;
+            }
         }
-
-        // Validar precio
-        if (!is_numeric($price) || $price <= 0) {
-            $this->errors[] = "El precio debe ser un valor numérico mayor a 0.";
-            return false;
-        }
-
-        // Escapar valores
-        $name        = $this->db_connection->real_escape_string(trim($name));
-        $description = $description !== null
-            ? $this->db_connection->real_escape_string($description)
-            : null;
-        $price       = $this->db_connection->real_escape_string($price);
-
-        $desc_value = $description !== null ? "'$description'" : "NULL";
-
-        // 1. Insertar producto
-        $sql_product = "INSERT INTO products (name, description, status, created_at)
-                        VALUES ('$name', $desc_value, 1, NOW())";
-
-        if (!$this->db_connection->query($sql_product)) {
-            $this->errors[] = "Error al crear el producto: " . $this->db_connection->error;
-            return false;
-        }
-
-        $id_product = $this->db_connection->insert_id;
-
-        // 2. Insertar precio
-        $sql_price = "INSERT INTO prices (id_product, price, created_at)
-                      VALUES ('$id_product', '$price', NOW())";
-
-        if (!$this->db_connection->query($sql_price)) {
-            $this->errors[] = "Error al registrar el precio: " . $this->db_connection->error;
-            return false;
-        }
-
-        $id_price = $this->db_connection->insert_id;
-
-        // 3. Actualizar price_id en el producto
-        $sql_update = "UPDATE products SET price_id = '$id_price' WHERE id_product = '$id_product'";
-
-        if (!$this->db_connection->query($sql_update)) {
-            $this->errors[] = "Error al actualizar el precio del producto: " . $this->db_connection->error;
-            return false;
-        }
-
-        $this->messages[] = "Producto creado exitosamente.";
-        return true;
+        
+        return $prices;
     }
 
-    /**
-     * Actualiza el nombre y descripción de un producto activo.
-     */
-    public function updateProduct(int $id_product, string $name, ?string $description): bool
+    public function createProduct($name, $description, $price_id)
     {
-        // Validar nombre
-        if (empty(trim($name))) {
-            $this->errors[] = "El nombre del producto es requerido.";
+        // Validations
+        if (empty($name)) {
+            $this->errors[] = "Product name is required.";
             return false;
         }
-
-        // Verificar que el producto existe y está activo
-        $id_escaped = $this->db_connection->real_escape_string($id_product);
-        $check_sql  = "SELECT id_product FROM products WHERE id_product = '$id_escaped' AND status = 1";
+        
+        if (empty($price_id)) {
+            $this->errors[] = "Price is required.";
+            return false;
+        }
+        
+        // Verify if product already exists
+        $name = $this->db_connection->real_escape_string($name);
+        $description = $this->db_connection->real_escape_string($description);
+        $price_id = $this->db_connection->real_escape_string($price_id);
+        
+        $check_sql = "SELECT id_product FROM products WHERE name = '$name' AND deleted_at IS NULL";
         $check_result = $this->db_connection->query($check_sql);
-
-        if (!$check_result || $check_result->num_rows == 0) {
-            $this->errors[] = "El producto no existe o está inactivo.";
+        
+        if ($check_result && $check_result->num_rows > 0) {
+            $this->errors[] = "Product with this name already exists.";
             return false;
         }
-
-        // Escapar valores
-        $name        = $this->db_connection->real_escape_string(trim($name));
-        $description = $description !== null
-            ? $this->db_connection->real_escape_string($description)
-            : null;
-
-        $desc_value = $description !== null ? "'$description'" : "NULL";
-
-        $sql = "UPDATE products
-                SET    name = '$name', description = $desc_value
-                WHERE  id_product = '$id_escaped'";
-
+        
+        // Insert product
+        $sql = "INSERT INTO products (name, description, price_id, status, created_at) 
+                VALUES ('$name', '$description', '$price_id', 1, NOW())";
+        
         if ($this->db_connection->query($sql)) {
-            $this->messages[] = "Producto actualizado exitosamente.";
+            $this->messages[] = "Product created successfully.";
             return true;
         } else {
-            $this->errors[] = "Error al actualizar el producto: " . $this->db_connection->error;
+            $this->errors[] = "Error creating product: " . $this->db_connection->error;
             return false;
         }
     }
 
-    /**
-     * Actualiza el precio de un producto activo preservando el historial.
-     * Secuencia: INSERT prices → last_insert_id() → UPDATE products SET price_id
-     */
-    public function updatePrice(int $id_product, float $price): bool
+    public function createPrice($price)
     {
-        // Validar precio
-        if (!is_numeric($price) || $price <= 0) {
-            $this->errors[] = "El precio debe ser un valor numérico mayor a 0.";
+        if (empty($price) || $price < 0) {
+            $this->errors[] = "Valid price is required.";
             return false;
         }
-
-        // Verificar que el producto existe y está activo
-        $id_escaped = $this->db_connection->real_escape_string($id_product);
-        $check_sql  = "SELECT id_product FROM products WHERE id_product = '$id_escaped' AND status = 1";
-        $check_result = $this->db_connection->query($check_sql);
-
-        if (!$check_result || $check_result->num_rows == 0) {
-            $this->errors[] = "El producto no existe o está inactivo.";
-            return false;
-        }
-
-        $price_escaped = $this->db_connection->real_escape_string($price);
-
-        // 1. Insertar nuevo precio (preserva historial)
-        $sql_price = "INSERT INTO prices (id_product, price, created_at)
-                      VALUES ('$id_escaped', '$price_escaped', NOW())";
-
-        if (!$this->db_connection->query($sql_price)) {
-            $this->errors[] = "Error al registrar el nuevo precio: " . $this->db_connection->error;
-            return false;
-        }
-
-        $id_price = $this->db_connection->insert_id;
-
-        // 2. Actualizar price_id en el producto
-        $sql_update = "UPDATE products SET price_id = '$id_price' WHERE id_product = '$id_escaped'";
-
-        if (!$this->db_connection->query($sql_update)) {
-            $this->errors[] = "Error al actualizar el precio del producto: " . $this->db_connection->error;
-            return false;
-        }
-
-        $this->messages[] = "Precio actualizado exitosamente.";
-        return true;
-    }
-
-    /**
-     * Realiza un soft delete del producto (status = 0).
-     * No elimina los registros de prices asociados.
-     */
-    public function deleteProduct(int $id_product): bool
-    {
-        // Verificar que el producto existe y está activo
-        $id_escaped = $this->db_connection->real_escape_string($id_product);
-        $check_sql  = "SELECT id_product FROM products WHERE id_product = '$id_escaped' AND status = 1";
-        $check_result = $this->db_connection->query($check_sql);
-
-        if (!$check_result || $check_result->num_rows == 0) {
-            $this->errors[] = "El producto no existe o está inactivo.";
-            return false;
-        }
-
-        $sql = "UPDATE products SET status = 0 WHERE id_product = '$id_escaped'";
-
+        
+        $price = $this->db_connection->real_escape_string($price);
+        
+        $sql = "INSERT INTO prices (price, created_at) VALUES ('$price', NOW())";
+        
         if ($this->db_connection->query($sql)) {
-            $this->messages[] = "Producto eliminado exitosamente.";
+            $this->messages[] = "Price created successfully.";
+            return $this->db_connection->insert_id;
+        } else {
+            $this->errors[] = "Error creating price: " . $this->db_connection->error;
+            return false;
+        }
+    }
+
+    public function updateProduct($id_product, $name, $description, $price_id, $status)
+    {
+        // Validations
+        if (empty($name)) {
+            $this->errors[] = "Product name is required.";
+            return false;
+        }
+        
+        if (empty($price_id)) {
+            $this->errors[] = "Price is required.";
+            return false;
+        }
+        
+        // Escape values
+        $id_product = $this->db_connection->real_escape_string($id_product);
+        $name = $this->db_connection->real_escape_string($name);
+        $description = $this->db_connection->real_escape_string($description);
+        $price_id = $this->db_connection->real_escape_string($price_id);
+        $status = $this->db_connection->real_escape_string($status);
+        
+        // Check if product exists and is not deleted
+        $check_sql = "SELECT id_product FROM products 
+                     WHERE id_product = '$id_product' AND deleted_at IS NULL";
+        $check_result = $this->db_connection->query($check_sql);
+        
+        if (!$check_result || $check_result->num_rows == 0) {
+            $this->errors[] = "Product not found.";
+            return false;
+        }
+        
+        // Check if name already exists (excluding current product)
+        $name_check_sql = "SELECT id_product FROM products 
+                           WHERE name = '$name' AND id_product != '$id_product' AND deleted_at IS NULL";
+        $name_check_result = $this->db_connection->query($name_check_sql);
+        
+        if ($name_check_result && $name_check_result->num_rows > 0) {
+            $this->errors[] = "Product with this name already exists.";
+            return false;
+        }
+        
+        // Update product
+        $sql = "UPDATE products SET 
+                    name = '$name', 
+                    description = '$description', 
+                    price_id = '$price_id', 
+                    status = '$status',
+                    updated_at = NOW()
+                 WHERE id_product = '$id_product'";
+        
+        if ($this->db_connection->query($sql)) {
+            $this->messages[] = "Product updated successfully.";
             return true;
         } else {
-            $this->errors[] = "Error al eliminar el producto: " . $this->db_connection->error;
+            $this->errors[] = "Error updating product: " . $this->db_connection->error;
             return false;
         }
     }
 
-    /**
-     * Retorna el historial de precios de un producto ordenado por fecha descendente.
-     */
-    public function getPriceHistory(int $id_product): array
+    public function deleteProduct($id_product)
     {
-        $id_escaped = $this->db_connection->real_escape_string($id_product);
+        $id_product = $this->db_connection->real_escape_string($id_product);
+        
+        // Check if product exists
+        $check_sql = "SELECT id_product FROM products WHERE id_product = '$id_product' AND deleted_at IS NULL";
+        $check_result = $this->db_connection->query($check_sql);
+        
+        if (!$check_result || $check_result->num_rows == 0) {
+            $this->errors[] = "Product not found.";
+            return false;
+        }
+        
+        // Logical delete - update deleted_at timestamp
+        $sql = "UPDATE products SET deleted_at = NOW() WHERE id_product = '$id_product'";
+        
+        if ($this->db_connection->query($sql)) {
+            $this->messages[] = "Product deleted successfully.";
+            return true;
+        } else {
+            $this->errors[] = "Error deleting product: " . $this->db_connection->error;
+            return false;
+        }
+    }
 
-        $sql = "SELECT id_price, price, created_at
-                FROM   prices
-                WHERE  id_product = '$id_escaped'
-                ORDER  BY id_price DESC";
+    public function toggleProductStatus($id_product)
+    {
+        $id_product = $this->db_connection->real_escape_string($id_product);
+        
+        // Check if product exists
+        $check_sql = "SELECT id_product, status FROM products WHERE id_product = '$id_product' AND deleted_at IS NULL";
+        $check_result = $this->db_connection->query($check_sql);
+        
+        if (!$check_result || $check_result->num_rows == 0) {
+            $this->errors[] = "Product not found.";
+            return false;
+        }
+        
+        $current_status = $check_result->fetch_assoc()['status'];
+        $new_status = $current_status == 1 ? 0 : 1;
+        
+        $sql = "UPDATE products SET status = '$new_status', updated_at = NOW() WHERE id_product = '$id_product'";
+        
+        if ($this->db_connection->query($sql)) {
+            $this->messages[] = "Product status updated successfully.";
+            return true;
+        } else {
+            $this->errors[] = "Error updating product status: " . $this->db_connection->error;
+            return false;
+        }
+    }
 
+    public function getProductPriceHistory($product_id)
+    {
+        $product_id = $this->db_connection->real_escape_string($product_id);
+        
+        $sql = "SELECT p.name, pr.price, pr.created_at as price_date
+                FROM products p
+                LEFT JOIN prices pr ON p.price_id = pr.id_price
+                WHERE p.id_product = '$product_id'
+                ORDER BY pr.created_at DESC";
+        
         $result = $this->db_connection->query($sql);
         $history = array();
-
+        
         if ($result) {
             while ($row = $result->fetch_assoc()) {
                 $history[] = $row;
             }
         }
-
+        
         return $history;
     }
 

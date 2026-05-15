@@ -1,22 +1,19 @@
 <?php
 require_once __DIR__ . '/../../config/app_config.php';
-session_start();
+require_once __DIR__ . '/../../model/login/Login.php';
+require_once __DIR__ . '/../../model/product/Product.php';
 
-// Verificar si el usuario está logueado
-if (!isset($_SESSION['user_login_status']) || $_SESSION['user_login_status'] != 1) {
-    header("location: " . BASE_URL . "controller/login/");
+// Check authentication
+$login = new Login();
+if (!$login->isConected()) {
+    header("location: " . CONTROLLER_URL . "login");
     exit();
 }
 
-// Verificar si el usuario tiene permisos (solo admin puede gestionar productos)
-if ($_SESSION['rol'] != 'Administrator') {
-    header("location: " . BASE_URL);
-    exit();
-}
-
-require_once MODEL_PATH . 'product/Product.php';
-
+// Initialize Product model
 $product = new Product();
+
+// Get action from URL
 $action = isset($_GET['action']) ? $_GET['action'] : 'list';
 
 // Set page title and breadcrumb
@@ -29,88 +26,93 @@ $breadcrumb = [
 switch ($action) {
     case 'list':
         $products = $product->getAllProducts();
-        $pageTitle = 'Gestión de Productos';
+        $pageTitle = 'Products List';
         $breadcrumb[] = ['name' => 'List', 'url' => ''];
         $content = VIEW_PATH . 'product/content-list.php';
         break;
-
+        
     case 'create':
-        $pageTitle = 'Nuevo Producto';
-        $breadcrumb[] = ['name' => 'Crear', 'url' => ''];
-
+        $pageTitle = 'Create Product';
+        $breadcrumb[] = ['name' => 'Create', 'url' => ''];
+        
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $name        = $_POST['name'];
+            $name = $_POST['name'];
             $description = $_POST['description'];
-            $price       = $_POST['price'];
-
-            if ($product->createProduct($name, $description, $price)) {
+            $price_id = $_POST['price_id'];
+            
+            if ($product->createProduct($name, $description, $price_id)) {
                 header("location: " . CONTROLLER_URL . "product/?success=created");
                 exit();
             }
         }
-
+        
+        $prices = $product->getAllPrices();
         $content = VIEW_PATH . 'product/content-form.php';
         break;
-
+        
     case 'edit':
-        $id = isset($_GET['id']) ? $_GET['id'] : 0;
-        $pageTitle = 'Editar Producto';
-        $breadcrumb[] = ['name' => 'Editar', 'url' => ''];
-
+        $id_product = isset($_GET['id']) ? $_GET['id'] : 0;
+        $productData = $product->getProductById($id_product);
+        
+        if (!$productData) {
+            header("location: " . CONTROLLER_URL . "product/?error=not_found");
+            exit();
+        }
+        
+        $pageTitle = 'Edit Product';
+        $breadcrumb[] = ['name' => 'Edit', 'url' => ''];
+        
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $id          = $_POST['id'];
-            $name        = $_POST['name'];
+            $name = $_POST['name'];
             $description = $_POST['description'];
-
-            if ($product->updateProduct($id, $name, $description)) {
+            $price_id = $_POST['price_id'];
+            $status = isset($_POST['status']) ? $_POST['status'] : 1;
+            
+            if ($product->updateProduct($id_product, $name, $description, $price_id, $status)) {
                 header("location: " . CONTROLLER_URL . "product/?success=updated");
                 exit();
             }
         }
-
-        $productData = $product->getProductById($id);
+        
+        $prices = $product->getAllPrices();
         $content = VIEW_PATH . 'product/content-form.php';
         break;
-
-    case 'update_price':
-        $id = isset($_GET['id']) ? $_GET['id'] : 0;
-        $pageTitle = 'Actualizar Precio';
-        $breadcrumb[] = ['name' => 'Precio', 'url' => ''];
-
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $id    = $_POST['id'];
-            $price = $_POST['price'];
-
-            if ($product->updatePrice($id, $price)) {
-                header("location: " . CONTROLLER_URL . "product/?success=price_updated");
-                exit();
-            }
-
-            $productData  = $product->getProductById($id);
-            $priceHistory = $product->getPriceHistory($id);
-        } else {
-            $productData  = $product->getProductById($id);
-            $priceHistory = $product->getPriceHistory($id);
-        }
-
-        $content = VIEW_PATH . 'product/content-price.php';
-        break;
-
+        
     case 'delete':
-        $id = isset($_GET['id']) ? $_GET['id'] : 0;
-
-        if ($product->deleteProduct($id)) {
+        $id_product = isset($_GET['id']) ? $_GET['id'] : 0;
+        
+        if ($product->deleteProduct($id_product)) {
             header("location: " . CONTROLLER_URL . "product/?success=deleted");
         } else {
             header("location: " . CONTROLLER_URL . "product/?error=delete_failed");
         }
         exit();
-
+        
+    case 'toggle_status':
+        $id_product = isset($_GET['id']) ? $_GET['id'] : 0;
+        
+        if ($product->toggleProductStatus($id_product)) {
+            header("location: " . CONTROLLER_URL . "product/?success=status_toggled");
+        } else {
+            header("location: " . CONTROLLER_URL . "product/?error=status_failed");
+        }
+        exit();
+        
+    case 'price_history':
+        $id_product = isset($_GET['id']) ? $_GET['id'] : 0;
+        $priceHistory = $product->getProductPriceHistory($id_product);
+        $productData = $product->getProductById($id_product);
+        
+        $pageTitle = 'Price History';
+        $breadcrumb[] = ['name' => 'Price History', 'url' => ''];
+        $content = VIEW_PATH . 'product/content-price-history.php';
+        break;
+        
     default:
-        header("location: " . CONTROLLER_URL . "product/");
+        header("location: " . CONTROLLER_URL . "product/?action=list");
         exit();
 }
 
-// Include the template layout
+// Include the main template
 require_once VIEW_PATH . 'template/layout.php';
 ?>
