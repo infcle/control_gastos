@@ -1,0 +1,51 @@
+# SDD Configuration — control_gastos
+# Generated: 2026-05-17
+# Mode: openspec
+
+context: >
+  PHP 7.4+ MVC project with mysqli, MySQL 5.7+, Bootstrap 5 UI.
+  No framework, no Composer. Session-based auth with bcrypt.
+  expense_db: roles, users, products, prices.
+  Existing modules: Login (auth), User CRUD, Product CRUD (with price history + soft delete).
+  Source: .kiro/specs/product-crud/ has earlier specs by a different agent tool.
+  Target: add purchases module (suppliers, categories, purchase details).
+
+strict_tdd: false
+
+testing:
+  runner:
+    command: php tests/<TestFile>.php
+    framework: php-cli (custom self-executing classes)
+  layers:
+    unit: false
+    integration: true
+    e2e: false
+  coverage:
+    available: false
+  quality:
+    linter: false
+    type_checker: false
+    formatter: false
+
+phases:
+  propose:
+    required: true
+    artifacts: openspec/changes/<change>/proposal.md
+  spec:
+    required: true
+    artifacts: openspec/changes/<change>/spec.md
+  design:
+    required: true
+    artifacts: openspec/changes/<change>/design.md
+  tasks:
+    required: true
+    artifacts: openspec/changes/<change>/tasks.md
+  apply:
+    required: true
+    artifacts: openspec/changes/<change>/ (implementation files)
+  verify:
+    required: true
+    artifacts: openspec/changes/<change>/verify-report.md
+  archive:
+    required: false
+    artifacts: openspec/changes/archive/<change>-<date>.md
