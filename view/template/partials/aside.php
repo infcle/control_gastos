@@ -113,6 +113,22 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="<?php echo CONTROLLER_URL; ?>purchase/">
+                        <i class="icon">
+                            <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21.9999 15.94V18.04C21.9999 19.06 21.1399 19.93 20.1099 19.95H19.9599C19.6399 19.15 18.8599 18.6 17.9499 18.6C17.0399 18.6 16.2599 19.15 15.9399 19.95H12.5599V15.5H21.9999V15.94Z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M13.8199 19.95H11.8899C11.5899 19.18 10.8399 18.63 9.95994 18.6C10.0399 18.36 10.0799 18.1 10.0799 17.84C10.0799 16.55 9.02994 15.5 7.73994 15.5C6.44994 15.5 5.39994 16.55 5.39994 17.84C5.39994 18.1 5.43994 18.36 5.51994 18.6C4.61994 18.63 3.86994 19.18 3.56994 19.95H2.06994C1.49994 19.95 0.939941 19.57 0.939941 18.83V10.17H3.16994C3.44994 10.17 3.81994 9.97 3.95994 9.73L4.83994 8.17L5.47994 7.03C5.61994 6.79 5.56994 6.49 5.35994 6.3L3.75994 4.86L4.18994 4.43L5.78994 5.87C5.98994 6.06 6.28994 6.1 6.52994 5.96L7.66994 5.32L9.22994 4.44C9.46994 4.3 9.66994 3.93 9.66994 3.65V1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M5.67994 17.84C5.67994 18.98 6.61994 19.92 7.75994 19.92C8.89994 19.92 9.83994 18.98 9.83994 17.84C9.83994 16.7 8.89994 15.76 7.75994 15.76C6.61994 15.76 5.67994 16.7 5.67994 17.84Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M16.4401 17.84C16.4401 18.98 17.3801 19.92 18.5201 19.92C19.6601 19.92 20.6001 18.98 20.6001 17.84C20.6001 16.7 19.6601 15.76 18.5201 15.76C17.3801 15.76 16.4401 16.7 16.4401 17.84Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M12.5599 15.5V19.95H15.9399" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M3.16992 10.1699V6.05994" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M4.11994 16.6799V9.55994" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </i>
+                        <span class="item-name">Purchases</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="<?php echo CONTROLLER_URL; ?>product/">
                         <i class="icon">
                             <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
