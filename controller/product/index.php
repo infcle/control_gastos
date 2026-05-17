@@ -39,14 +39,16 @@ switch ($action) {
             $name = $_POST['name'];
             $description = $_POST['description'];
             $price_id = $_POST['price_id'];
+            $id_category = isset($_POST['id_category']) && $_POST['id_category'] !== '' ? $_POST['id_category'] : null;
             
-            if ($product->createProduct($name, $description, $price_id)) {
+            if ($product->createProduct($name, $description, $price_id, $id_category)) {
                 header("location: " . CONTROLLER_URL . "product/?success=created");
                 exit();
             }
         }
         
         $prices = $product->getAllPrices();
+        $categories = $product->getAllCategories();
         $content = VIEW_PATH . 'product/content-form.php';
         break;
         
@@ -67,14 +69,16 @@ switch ($action) {
             $description = $_POST['description'];
             $price_id = $_POST['price_id'];
             $status = isset($_POST['status']) ? $_POST['status'] : 1;
+            $id_category = isset($_POST['id_category']) && $_POST['id_category'] !== '' ? $_POST['id_category'] : null;
             
-            if ($product->updateProduct($id_product, $name, $description, $price_id, $status)) {
+            if ($product->updateProduct($id_product, $name, $description, $price_id, $status, $id_category)) {
                 header("location: " . CONTROLLER_URL . "product/?success=updated");
                 exit();
             }
         }
         
         $prices = $product->getAllPrices();
+        $categories = $product->getAllCategories();
         $content = VIEW_PATH . 'product/content-form.php';
         break;
         

@@ -50,8 +50,28 @@
                   </div>
                </div>
 
-               <!-- Precio (solo en modo creación) -->
-               <?php if (!isset($productData)): ?>
+                <!-- Categoría -->
+                <div class="row">
+                   <div class="col-md-6">
+                      <div class="form-group mb-3">
+                         <label for="id_category" class="form-label">Categoría</label>
+                         <select class="form-select" id="id_category" name="id_category">
+                            <option value="">Sin categoría</option>
+                            <?php if (isset($categories) && !empty($categories)): ?>
+                               <?php foreach ($categories as $cat): ?>
+                                  <option value="<?php echo $cat['id_category']; ?>"
+                                     <?php echo (isset($productData) && $productData['id_category'] == $cat['id_category']) || (isset($_POST['id_category']) && $_POST['id_category'] == $cat['id_category']) ? 'selected' : ''; ?>>
+                                     <?php echo htmlspecialchars($cat['name']); ?>
+                                  </option>
+                               <?php endforeach; ?>
+                            <?php endif; ?>
+                         </select>
+                      </div>
+                   </div>
+                </div>
+
+                <!-- Precio (solo en modo creación) -->
+                <?php if (!isset($productData)): ?>
                   <div class="row">
                      <div class="col-md-6">
                         <div class="form-group mb-3">

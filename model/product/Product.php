@@ -17,9 +17,10 @@ class Product
 
     public function getAllProducts()
     {
-        $sql = "SELECT p.id_product, p.name, p.description, pr.price, p.status, p.created_at, p.updated_at
+        $sql = "SELECT p.id_product, p.name, p.description, p.id_category, c.name AS category_name, pr.price, p.status, p.created_at, p.updated_at
                 FROM products p 
                 LEFT JOIN prices pr ON p.price_id = pr.id_price 
+                LEFT JOIN categories c ON p.id_category = c.id_category AND c.deleted_at IS NULL
                 WHERE p.deleted_at IS NULL 
                 ORDER BY p.created_at DESC";
         
@@ -38,9 +39,10 @@ class Product
     public function getProductById($id_product)
     {
         $id_product = $this->db_connection->real_escape_string($id_product);
-        $sql = "SELECT p.id_product, p.name, p.description, p.price_id, pr.price, p.status, p.created_at, p.updated_at
+        $sql = "SELECT p.id_product, p.name, p.description, p.id_category, c.name AS category_name, p.price_id, pr.price, p.status, p.created_at, p.updated_at
                 FROM products p 
                 LEFT JOIN prices pr ON p.price_id = pr.id_price 
+                LEFT JOIN categories c ON p.id_category = c.id_category AND c.deleted_at IS NULL
                 WHERE p.id_product = '$id_product' AND p.deleted_at IS NULL";
         
         $result = $this->db_connection->query($sql);
@@ -67,7 +69,7 @@ class Product
         return $prices;
     }
 
-    public function createProduct($name, $description, $price_id)
+    public function createProduct($name, $description, $price_id, $id_category = null)
     {
         // Validations
         if (empty($name)) {
@@ -84,6 +86,7 @@ class Product
         $name = $this->db_connection->real_escape_string($name);
         $description = $this->db_connection->real_escape_string($description);
         $price_id = $this->db_connection->real_escape_string($price_id);
+        $id_category = !empty($id_category) ? $this->db_connection->real_escape_string($id_category) : 'NULL';
         
         $check_sql = "SELECT id_product FROM products WHERE name = '$name' AND deleted_at IS NULL";
         $check_result = $this->db_connection->query($check_sql);
@@ -94,8 +97,8 @@ class Product
         }
         
         // Insert product
-        $sql = "INSERT INTO products (name, description, price_id, status, created_at) 
-                VALUES ('$name', '$description', '$price_id', 1, NOW())";
+        $sql = "INSERT INTO products (name, description, id_category, price_id, status, created_at) 
+                VALUES ('$name', '$description', $id_category, '$price_id', 1, NOW())";
         
         if ($this->db_connection->query($sql)) {
             $this->messages[] = "Product created successfully.";
@@ -126,7 +129,7 @@ class Product
         }
     }
 
-    public function updateProduct($id_product, $name, $description, $price_id, $status)
+    public function updateProduct($id_product, $name, $description, $price_id, $status, $id_category = null)
     {
         // Validations
         if (empty($name)) {
@@ -145,6 +148,7 @@ class Product
         $description = $this->db_connection->real_escape_string($description);
         $price_id = $this->db_connection->real_escape_string($price_id);
         $status = $this->db_connection->real_escape_string($status);
+        $id_category = !empty($id_category) ? $this->db_connection->real_escape_string($id_category) : 'NULL';
         
         // Check if product exists and is not deleted
         $check_sql = "SELECT id_product FROM products 
@@ -170,6 +174,7 @@ class Product
         $sql = "UPDATE products SET 
                     name = '$name', 
                     description = '$description', 
+                    id_category = $id_category,
                     price_id = '$price_id', 
                     status = '$status',
                     updated_at = NOW()
@@ -256,6 +261,25 @@ class Product
         }
         
         return $history;
+    }
+
+    public function getAllCategories()
+    {
+        $sql = "SELECT id_category, name
+                FROM categories
+                WHERE deleted_at IS NULL
+                ORDER BY name ASC";
+
+        $result = $this->db_connection->query($sql);
+        $categories = array();
+
+        if ($result) {
+            while ($row = $result->fetch_assoc()) {
+                $categories[] = $row;
+            }
+        }
+
+        return $categories;
     }
 
     public function __destruct()
