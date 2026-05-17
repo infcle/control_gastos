@@ -87,6 +87,48 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="<?php echo CONTROLLER_URL; ?>category/">
+                        <i class="icon">
+                            <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path opacity="0.4" d="M20.4419 11.0421L14.4219 11.0021C13.8519 10.9921 13.3919 10.5421 13.3819 9.97213L13.3419 7.05212C13.3319 6.48212 13.7819 6.02212 14.3519 6.01212L20.3719 6.05212C20.9419 6.06212 21.4019 6.51212 21.4119 7.08212L21.4519 10.0021C21.4619 10.5721 21.0119 11.0321 20.4419 11.0421Z" fill="currentColor"></path>
+                                <path d="M21.42 6.16226C21.32 5.91226 21.13 5.70226 20.88 5.57226C20.63 5.44226 20.35 5.40226 20.07 5.45226L5.34001 7.94226C5.02001 7.98226 4.72001 8.11226 4.48001 8.33226C4.23001 8.54226 4.06001 8.83226 4.00001 9.15226L3.05001 13.4923L2.11001 17.8323C2.02001 18.2523 2.09001 18.6923 2.31001 19.0623C2.53001 19.4323 2.88001 19.7123 3.29001 19.8423L19.47 24.3423C19.76 24.4323 20.06 24.4523 20.35 24.3923C20.98 24.2623 21.51 23.8423 21.78 23.2523C21.95 22.8923 22.02 22.4923 21.98 22.1023L19.1 7.15226C19.01 6.66226 18.74 6.23226 18.35 5.94226C18.08 5.74226 17.75 5.63226 17.42 5.61226L20.44 5.70226C20.72 5.71226 21 5.62226 21.23 5.44226C21.46 5.26226 21.61 5.00226 21.67 4.72226C21.75 4.33226 21.68 3.92226 21.42 3.58226C21.3 3.42226 21.15 3.29226 20.97 3.19226C20.63 3.00226 20.25 2.92226 19.87 2.97226L4.26001 5.53226C3.80001 5.59226 3.37001 5.80226 3.04001 6.13226C2.72001 6.45226 2.51001 6.88226 2.45001 7.34226L1.28001 13.9923C1.26001 14.1123 1.26001 14.2323 1.28001 14.3523C1.31001 14.2123 1.31001 14.2123 1.28001 14.3523L0.330014 18.6923L0.310014 18.7123C0.220014 19.1323 0.290014 19.5723 0.510014 19.9423C0.730014 20.3123 1.08001 20.5923 1.49001 20.7223L17.67 25.2223C17.96 25.3123 18.26 25.3323 18.55 25.2723C19.18 25.1423 19.71 24.7223 19.98 24.1323C20.15 23.7723 20.22 23.3723 20.18 22.9823L17.3 8.03226C17.21 7.54226 16.94 7.11226 16.55 6.82226C16.28 6.62226 15.95 6.51226 15.62 6.49226" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </svg>
+                        </i>
+                        <span class="item-name">Categories</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?php echo CONTROLLER_URL; ?>supplier/">
+                        <i class="icon">
+                            <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21.9999 15.94V18.04C21.9999 19.06 21.1399 19.93 20.1099 19.95H19.9599C19.6399 19.15 18.8599 18.6 17.9499 18.6C17.0399 18.6 16.2599 19.15 15.9399 19.95H13.8199C13.5199 19.18 12.7699 18.63 11.8899 18.6C11.9699 18.36 12.0099 18.1 12.0099 17.84C12.0099 16.55 10.9599 15.5 9.66994 15.5C8.37994 15.5 7.32994 16.55 7.32994 17.84C7.32994 18.1 7.36994 18.36 7.44994 18.6H6.12994C6.05994 18.16 5.81994 17.57 5.33994 17.15C4.99994 16.85 4.56994 16.68 4.11994 16.68H3.16994V10.17H4.96994C5.24994 10.17 5.61994 9.97 5.75994 9.73L6.63994 8.17L7.27994 7.03C7.41994 6.79 7.36994 6.49 7.15994 6.3L5.55994 4.86L5.98994 4.43L7.58994 5.87C7.78994 6.06 8.08994 6.1 8.32994 5.96L9.46994 5.32L11.0299 4.44C11.2699 4.3 11.4699 3.93 11.4699 3.65V1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                <path d="M7.55994 17.84C7.55994 18.98 8.49994 19.92 9.63994 19.92C10.7799 19.92 11.7199 18.98 11.7199 17.84C11.7199 16.7 10.7799 15.76 9.63994 15.76C8.49994 15.76 7.55994 16.7 7.55994 17.84Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                <path d="M16.4401 17.84C16.4401 18.98 17.3801 19.92 18.5201 19.92C19.6601 19.92 20.6001 18.98 20.6001 17.84C20.6001 16.7 19.6601 15.76 18.5201 15.76C17.3801 15.76 16.4401 16.7 16.4401 17.84Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                <path d="M15.9399 19.93H11.8899" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                <path d="M3.16992 10.1699V6.05994" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                <path d="M4.11994 16.6799V9.55994" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </svg>
+                        </i>
+                        <span class="item-name">Suppliers</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?php echo CONTROLLER_URL; ?>purchase/">
+                        <i class="icon">
+                            <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21.9999 15.94V18.04C21.9999 19.06 21.1399 19.93 20.1099 19.95H19.9599C19.6399 19.15 18.8599 18.6 17.9499 18.6C17.0399 18.6 16.2599 19.15 15.9399 19.95H12.5599V15.5H21.9999V15.94Z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M13.8199 19.95H11.8899C11.5899 19.18 10.8399 18.63 9.95994 18.6C10.0399 18.36 10.0799 18.1 10.0799 17.84C10.0799 16.55 9.02994 15.5 7.73994 15.5C6.44994 15.5 5.39994 16.55 5.39994 17.84C5.39994 18.1 5.43994 18.36 5.51994 18.6C4.61994 18.63 3.86994 19.18 3.56994 19.95H2.06994C1.49994 19.95 0.939941 19.57 0.939941 18.83V10.17H3.16994C3.44994 10.17 3.81994 9.97 3.95994 9.73L4.83994 8.17L5.47994 7.03C5.61994 6.79 5.56994 6.49 5.35994 6.3L3.75994 4.86L4.18994 4.43L5.78994 5.87C5.98994 6.06 6.28994 6.1 6.52994 5.96L7.66994 5.32L9.22994 4.44C9.46994 4.3 9.66994 3.93 9.66994 3.65V1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M5.67994 17.84C5.67994 18.98 6.61994 19.92 7.75994 19.92C8.89994 19.92 9.83994 18.98 9.83994 17.84C9.83994 16.7 8.89994 15.76 7.75994 15.76C6.61994 15.76 5.67994 16.7 5.67994 17.84Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M16.4401 17.84C16.4401 18.98 17.3801 19.92 18.5201 19.92C19.6601 19.92 20.6001 18.98 20.6001 17.84C20.6001 16.7 19.6601 15.76 18.5201 15.76C17.3801 15.76 16.4401 16.7 16.4401 17.84Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M12.5599 15.5V19.95H15.9399" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M3.16992 10.1699V6.05994" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M4.11994 16.6799V9.55994" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </i>
+                        <span class="item-name">Purchases</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="<?php echo CONTROLLER_URL; ?>product/">
                         <i class="icon">
                             <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

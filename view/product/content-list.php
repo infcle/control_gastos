@@ -46,15 +46,16 @@
             <div class="table-responsive">
                <table class="table table-striped table-hover">
                   <thead>
-                     <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Price</th>
-                        <th>Status</th>
-                        <th>Created</th>
-                        <th>Actions</th>
-                     </tr>
+                      <tr>
+                         <th>ID</th>
+                         <th>Name</th>
+                         <th>Description</th>
+                         <th>Category</th>
+                         <th>Price</th>
+                         <th>Status</th>
+                         <th>Created</th>
+                         <th>Actions</th>
+                      </tr>
                   </thead>
                   <tbody>
                      <?php if (!empty($products)): ?>
@@ -69,14 +70,21 @@
                                     <span class="fw-medium"><?php echo htmlspecialchars($product['name']); ?></span>
                                  </div>
                               </td>
-                              <td>
-                                 <span class="text-truncate d-block" style="max-width: 200px;" title="<?php echo htmlspecialchars($product['description']); ?>">
-                                    <?php echo htmlspecialchars(substr($product['description'], 0, 50)) . (strlen($product['description']) > 50 ? '...' : ''); ?>
-                                 </span>
-                              </td>
-                              <td>
-                                 <span class="badge bg-success">$<?php echo number_format($product['price'], 2); ?></span>
-                              </td>
+                               <td>
+                                  <span class="text-truncate d-block" style="max-width: 200px;" title="<?php echo htmlspecialchars($product['description']); ?>">
+                                     <?php echo htmlspecialchars(substr($product['description'], 0, 50)) . (strlen($product['description']) > 50 ? '...' : ''); ?>
+                                  </span>
+                               </td>
+                               <td>
+                                  <?php if (!empty($product['category_name'])): ?>
+                                     <span class="badge bg-info"><?php echo htmlspecialchars($product['category_name']); ?></span>
+                                  <?php else: ?>
+                                     <span class="text-muted">—</span>
+                                  <?php endif; ?>
+                               </td>
+                               <td>
+                                  <span class="badge bg-success">$<?php echo number_format($product['price'], 2); ?></span>
+                               </td>
                               <td>
                                  <?php if ($product['status'] == 1): ?>
                                     <span class="badge bg-success">Active</span>
@@ -109,8 +117,8 @@
                            </tr>
                         <?php endforeach; ?>
                      <?php else: ?>
-                        <tr>
-                           <td colspan="6" class="text-center py-4">
+                         <tr>
+                            <td colspan="7" class="text-center py-4">
                               <div class="text-muted">
                                  <i class="bi bi-box fs-1 d-block mb-2"></i>
                                  No products found
