@@ -32,10 +32,23 @@ class ProductTest
     {
         try {
             $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-            // First delete prices for test products (FK constraint)
-            $conn->query("DELETE FROM prices WHERE id_product IN (SELECT id_product FROM products WHERE name LIKE 'test_%')");
-            // Then delete the test products
-            $conn->query("DELETE FROM products WHERE name LIKE 'test_%'");
+            // Get test product IDs
+            $ids_result = $conn->query("SELECT id_product FROM products WHERE name LIKE 'test_%' OR name = 'updated_name'");
+            $ids = array();
+            if ($ids_result) {
+                while ($row = $ids_result->fetch_assoc()) {
+                    $ids[] = $row['id_product'];
+                }
+            }
+            if (!empty($ids)) {
+                $id_list = implode(',', $ids);
+                // Delete purchase_details first (FK constraint)
+                $conn->query("DELETE FROM purchase_details WHERE id_product IN ($id_list)");
+                // Disconnect price_id FK (set to NULL) so we can delete products
+                $conn->query("UPDATE products SET price_id = NULL WHERE id_product IN ($id_list)");
+                // Finally delete products
+                $conn->query("DELETE FROM products WHERE id_product IN ($id_list)");
+            }
             $conn->close();
         } catch (Exception $e) {
             // Ignore cleanup errors
@@ -205,10 +218,10 @@ public function testGetAllPrices()
              return;
          }
 
-         // Test update
-         $updateResult = $product->updateProduct($tempProductId, 'updated_name', 'updated desc', $price_id, 1);
-         if ($updateResult) {
-             echo "✅ updateProduct() returned true\n";
+          // Test update
+          $updateResult = $product->updateProduct($tempProductId, 'updated_name', 'updated desc', $price_id, 1);
+          if ($updateResult) {
+              echo "✅ updateProduct() returned true\n";
 
              // Verify update
              $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
@@ -220,8 +233,8 @@ public function testGetAllPrices()
              } else {
                  echo "❌ Product data not updated correctly\n";
              }
-         } else {
-             echo "❌ updateProduct() should return true\n";
+          } else {
+              echo "❌ updateProduct() should return true\n";
          }
 
          echo "\n";

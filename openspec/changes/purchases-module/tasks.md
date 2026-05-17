@@ -60,7 +60,7 @@ Chain strategy: feature-branch-chain
 ## Phase 8: Navigation + Testing (PR 2/PR 3)
 
 - [x] 8.1 Modify `view/template/partials/aside.php` — add Purchases nav item
-- [ ] 8.2 Create `tests/CategoryTest.php` — CLI test: create, list, update, soft delete, FK guard
-- [ ] 8.3 Create `tests/SupplierTest.php` — CLI test: create, list, update, soft delete, unique name
-- [ ] 8.4 Create `tests/PurchaseTest.php` — CLI test: create with 2 suppliers, verify DB state, cascade soft delete
-- [ ] 8.5 Run all 3 tests + existing ProductTest to confirm no regressions
+- [x] 8.2 Create `tests/CategoryTest.php` — CLI test: create, list, update, soft delete, FK guard
+- [x] 8.3 Create `tests/SupplierTest.php` — CLI test: create, list, update, soft delete, unique name
+- [x] 8.4 Create `tests/PurchaseTest.php` — CLI test: create with 2 suppliers, verify DB state, cascade soft delete
+- [x] 8.5 Run all 3 tests + existing ProductTest to confirm no regressions
