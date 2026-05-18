@@ -17,7 +17,7 @@ class User
 
     public function getAllUsers()
     {
-        $sql = "SELECT u.id_user, u.username, u.email, u.status, u.created_at, r.name as role_name
+        $sql = "SELECT u.id_user, u.username, u.email, u.profile_picture, u.status, u.created_at, r.name as role_name
                 FROM users u 
                 LEFT JOIN roles r ON u.id_rol = r.id_rol 
                 ORDER BY u.created_at DESC";
@@ -37,7 +37,7 @@ class User
     public function getUserById($id_user)
     {
         $id_user = $this->db_connection->real_escape_string($id_user);
-        $sql = "SELECT u.id_user, u.username, u.email, u.status, u.id_rol, r.name as role_name
+        $sql = "SELECT u.id_user, u.username, u.email, u.profile_picture, u.status, u.id_rol, r.name as role_name
                 FROM users u 
                 LEFT JOIN roles r ON u.id_rol = r.id_rol 
                 WHERE u.id_user = '$id_user'";
@@ -243,6 +243,58 @@ class User
         
         $this->errors[] = "Error al cambiar el estado del usuario.";
         return false;
+    }
+
+    public function updateProfilePicture($id_user, $filename)
+    {
+        $id_user = $this->db_connection->real_escape_string($id_user);
+        $filename = $this->db_connection->real_escape_string($filename);
+
+        $sql = "UPDATE users SET profile_picture = '$filename' WHERE id_user = '$id_user'";
+
+        if ($this->db_connection->query($sql)) {
+            $this->messages[] = "Foto de perfil actualizada exitosamente.";
+            return true;
+        } else {
+            $this->errors[] = "Error al actualizar la foto de perfil: " . $this->db_connection->error;
+            return false;
+        }
+    }
+
+    public function updateProfile($id_user, $username, $email)
+    {
+        if (empty($username)) {
+            $this->errors[] = "El nombre de usuario es requerido.";
+            return false;
+        }
+
+        if (empty($email)) {
+            $this->errors[] = "El email es requerido.";
+            return false;
+        }
+
+        $id_user = $this->db_connection->real_escape_string($id_user);
+        $username = $this->db_connection->real_escape_string($username);
+        $email = $this->db_connection->real_escape_string($email);
+
+        $check_sql = "SELECT id_user FROM users 
+                     WHERE (username = '$username' OR email = '$email') AND id_user != '$id_user'";
+        $check_result = $this->db_connection->query($check_sql);
+
+        if ($check_result && $check_result->num_rows > 0) {
+            $this->errors[] = "El nombre de usuario o email ya existe.";
+            return false;
+        }
+
+        $sql = "UPDATE users SET username = '$username', email = '$email' WHERE id_user = '$id_user'";
+
+        if ($this->db_connection->query($sql)) {
+            $this->messages[] = "Perfil actualizado exitosamente.";
+            return true;
+        } else {
+            $this->errors[] = "Error al actualizar el perfil: " . $this->db_connection->error;
+            return false;
+        }
     }
 
     public function __destruct()

@@ -3,10 +3,10 @@
    <div class="alert alert-success alert-dismissible fade show" role="alert">
       <?php 
       switch($_GET['success']) {
-         case 'created': echo 'Product created successfully!'; break;
-         case 'updated': echo 'Product updated successfully!'; break;
-         case 'deleted': echo 'Product deleted successfully!'; break;
-         case 'status_toggled': echo 'Product status updated successfully!'; break;
+         case 'created': echo 'Producto creado exitosamente.'; break;
+         case 'updated': echo 'Producto actualizado exitosamente.'; break;
+         case 'deleted': echo 'Producto eliminado exitosamente.'; break;
+         case 'status_toggled': echo 'Estado del producto actualizado exitosamente.'; break;
       }
       ?>
       <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -17,9 +17,9 @@
    <div class="alert alert-danger alert-dismissible fade show" role="alert">
       <?php 
       switch($_GET['error']) {
-         case 'not_found': echo 'Product not found!'; break;
-         case 'delete_failed': echo 'Failed to delete product!'; break;
-         case 'status_failed': echo 'Failed to update product status!'; break;
+         case 'not_found': echo 'Producto no encontrado.'; break;
+         case 'delete_failed': echo 'Error al eliminar el producto.'; break;
+         case 'status_failed': echo 'Error al actualizar el estado del producto.'; break;
       }
       ?>
       <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -31,7 +31,7 @@
    <div class="col-lg-12">
       <div class="card">
          <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">Products List</h5>
+             <h5 class="mb-0">Lista de Productos</h5>
             <a href="<?php echo CONTROLLER_URL; ?>product/?action=create" class="btn btn-primary">
                <i class="me-2">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -39,7 +39,7 @@
                      <line x1="5" y1="12" x2="19" y2="12"/>
                   </svg>
                </i>
-               New Product
+               Nuevo Producto
             </a>
          </div>
          <div class="card-body">
@@ -47,14 +47,14 @@
                <table class="table table-striped table-hover">
                   <thead>
                       <tr>
-                         <th>ID</th>
-                         <th>Name</th>
-                         <th>Description</th>
-                         <th>Category</th>
-                         <th>Price</th>
-                         <th>Status</th>
-                         <th>Created</th>
-                         <th>Actions</th>
+                          <th>ID</th>
+                          <th>Nombre</th>
+                          <th>Descripción</th>
+                          <th>Categoría</th>
+                          <th>Precio</th>
+                          <th>Estado</th>
+                          <th>Creado</th>
+                          <th>Acciones</th>
                       </tr>
                   </thead>
                   <tbody>
@@ -87,29 +87,29 @@
                                </td>
                               <td>
                                  <?php if ($product['status'] == 1): ?>
-                                    <span class="badge bg-success">Active</span>
-                                 <?php else: ?>
-                                    <span class="badge bg-danger">Inactive</span>
+                                     <span class="badge bg-success">Activo</span>
+                                  <?php else: ?>
+                                     <span class="badge bg-danger">Inactivo</span>
                                  <?php endif; ?>
                               </td>
-                              <td><?php echo date('M d, Y', strtotime($product['created_at'])); ?></td>
+                               <td><?php echo date('d/m/Y', strtotime($product['created_at'])); ?></td>
                               <td>
                                  <div class="d-flex gap-1">
                                     <a href="<?php echo CONTROLLER_URL; ?>product/?action=edit&id=<?php echo $product['id_product']; ?>" 
-                                       class="btn btn-sm btn-primary" title="Edit">
+                                        class="btn btn-sm btn-primary" title="Editar">
                                        <i class="bi bi-pencil"></i>
                                     </a>
                                     <a href="<?php echo CONTROLLER_URL; ?>product/?action=price_history&id=<?php echo $product['id_product']; ?>" 
-                                       class="btn btn-sm btn-info" title="Price History">
+                                       class="btn btn-sm btn-info" title="Historial de Precios">
                                        <i class="bi bi-clock-history"></i>
                                     </a>
                                     <button onclick="toggleStatus(<?php echo $product['id_product']; ?>)" 
                                        class="btn btn-sm <?php echo $product['status'] == 1 ? 'btn-warning' : 'btn-success'; ?>" 
-                                       title="<?php echo $product['status'] == 1 ? 'Deactivate' : 'Activate'; ?>">
+                                        title="<?php echo $product['status'] == 1 ? 'Desactivar' : 'Activar'; ?>">
                                        <i class="bi bi-<?php echo $product['status'] == 1 ? 'pause' : 'play'; ?>"></i>
                                     </button>
-                                    <button onclick="deleteProduct(<?php echo $product['id_product']; ?>)" 
-                                       class="btn btn-sm btn-danger" title="Delete">
+                                     <button onclick="deleteProduct(<?php echo $product['id_product']; ?>)" 
+                                        class="btn btn-sm btn-danger" title="Eliminar">
                                        <i class="bi bi-trash"></i>
                                     </button>
                                  </div>
@@ -121,7 +121,7 @@
                             <td colspan="7" class="text-center py-4">
                               <div class="text-muted">
                                  <i class="bi bi-box fs-1 d-block mb-2"></i>
-                                 No products found
+                                  No se encontraron productos
                               </div>
                            </td>
                         </tr>
@@ -137,13 +137,13 @@
 <!-- JavaScript for actions -->
 <script>
 function toggleStatus(id) {
-   if (confirm('Are you sure you want to toggle the status of this product?')) {
+   if (confirm('¿Está seguro de cambiar el estado de este producto?')) {
       window.location.href = '<?php echo CONTROLLER_URL; ?>product/?action=toggle_status&id=' + id;
    }
 }
 
 function deleteProduct(id) {
-   if (confirm('Are you sure you want to delete this product? This action can be undone.')) {
+   if (confirm('¿Está seguro de eliminar este producto?')) {
       window.location.href = '<?php echo CONTROLLER_URL; ?>product/?action=delete&id=' + id;
    }
 }

@@ -1,14 +1,9 @@
 <?php
 require_once __DIR__ . '/../../config/app_config.php';
-require_once __DIR__ . '/../../model/login/Login.php';
-require_once __DIR__ . '/../../model/product/Product.php';
+require_once CONFIG_PATH . 'auth_helper.php';
+requireAuthWithAction(isset($_GET['action']) ? $_GET['action'] : 'list', 'Administrator');
 
-// Check authentication
-$login = new Login();
-if (!$login->isConected()) {
-    header("location: " . CONTROLLER_URL . "login");
-    exit();
-}
+require_once __DIR__ . '/../../model/product/Product.php';
 
 // Initialize Product model
 $product = new Product();
@@ -17,23 +12,23 @@ $product = new Product();
 $action = isset($_GET['action']) ? $_GET['action'] : 'list';
 
 // Set page title and breadcrumb
-$pageTitle = 'Products Management';
+$pageTitle = 'Gestión de Productos';
 $breadcrumb = [
-    ['name' => 'Dashboard', 'url' => BASE_URL],
-    ['name' => 'Products', 'url' => CONTROLLER_URL . 'product/']
+    ['name' => 'Panel Principal', 'url' => BASE_URL],
+    ['name' => 'Productos', 'url' => CONTROLLER_URL . 'product/']
 ];
 
 switch ($action) {
     case 'list':
         $products = $product->getAllProducts();
-        $pageTitle = 'Products List';
-        $breadcrumb[] = ['name' => 'List', 'url' => ''];
+        $pageTitle = 'Lista de Productos';
+        $breadcrumb[] = ['name' => 'Lista', 'url' => ''];
         $content = VIEW_PATH . 'product/content-list.php';
         break;
         
     case 'create':
-        $pageTitle = 'Create Product';
-        $breadcrumb[] = ['name' => 'Create', 'url' => ''];
+        $pageTitle = 'Nuevo Producto';
+        $breadcrumb[] = ['name' => 'Crear', 'url' => ''];
         
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $name = $_POST['name'];
@@ -61,8 +56,8 @@ switch ($action) {
             exit();
         }
         
-        $pageTitle = 'Edit Product';
-        $breadcrumb[] = ['name' => 'Edit', 'url' => ''];
+        $pageTitle = 'Editar Producto';
+        $breadcrumb[] = ['name' => 'Editar', 'url' => ''];
         
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $name = $_POST['name'];
@@ -107,8 +102,8 @@ switch ($action) {
         $priceHistory = $product->getProductPriceHistory($id_product);
         $productData = $product->getProductById($id_product);
         
-        $pageTitle = 'Price History';
-        $breadcrumb[] = ['name' => 'Price History', 'url' => ''];
+        $pageTitle = 'Historial de Precios';
+        $breadcrumb[] = ['name' => 'Historial de Precios', 'url' => ''];
         $content = VIEW_PATH . 'product/content-price-history.php';
         break;
         

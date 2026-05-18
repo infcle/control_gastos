@@ -46,6 +46,13 @@ class Login
                         $_SESSION['rol'] = $result_row->role_name;
                         $_SESSION['id_rol'] = $result_row->id_rol;
                         $_SESSION['user_login_status'] = 1;
+                        // Obtener foto de perfil
+                        $pic_sql = "SELECT profile_picture FROM users WHERE id_user = '{$result_row->id_user}'";
+                        $pic_result = $this->db_connection->query($pic_sql);
+                        if ($pic_result && $pic_result->num_rows == 1) {
+                            $pic_row = $pic_result->fetch_object();
+                            $_SESSION['profile_picture'] = $pic_row->profile_picture;
+                        }
                     } else {
                         $this->errors[] = "Usuario y/o contraseña no coinciden.";
                     }

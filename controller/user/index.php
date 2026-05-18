@@ -1,37 +1,97 @@
 <?php
 require_once __DIR__ . '/../../config/app_config.php';
-session_start();
+require_once CONFIG_PATH . 'auth_helper.php';
 
-// Verificar si el usuario está logueado
-if (!isset($_SESSION['user_login_status']) || $_SESSION['user_login_status'] != 1) {
-    header("location: " . BASE_URL . "controller/login/");
-    exit();
-}
-
-// Verificar si el usuario tiene permisos (solo admin puede gestionar usuarios)
-if ($_SESSION['rol'] != 'Administrator') {
-    header("location: " . BASE_URL);
-    exit();
-}
+$action = isset($_GET['action']) ? $_GET['action'] : 'list';
+requireAuthWithAction($action, 'Administrator');
 
 require_once MODEL_PATH . 'user/User.php';
 
 $user = new User();
-$action = isset($_GET['action']) ? $_GET['action'] : 'list';
-
 
 // Set page title and breadcrumb
-$pageTitle = 'Users Management';
+$pageTitle = 'Gestión de Usuarios';
 $breadcrumb = [
-    ['name' => 'Dashboard', 'url' => BASE_URL],
-    ['name' => 'Users', 'url' => CONTROLLER_URL . 'user/']
+    ['name' => 'Panel Principal', 'url' => BASE_URL],
+    ['name' => 'Usuarios', 'url' => CONTROLLER_URL . 'user/']
 ];
 
 switch ($action) {
+    case 'profile':
+        $id_user = $_SESSION['id_user'];
+        $pageTitle = 'Mi Perfil';
+        $breadcrumb = [
+            ['name' => 'Panel Principal', 'url' => BASE_URL],
+            ['name' => 'Mi Perfil', 'url' => '']
+        ];
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_profile'])) {
+            $username = $_POST['username'];
+            $email = $_POST['email'];
+
+            if ($user->updateProfile($id_user, $username, $email)) {
+                // Actualizar sesión
+                $_SESSION['user_name'] = $username;
+                header("location: " . CONTROLLER_URL . "user/?action=profile&success=updated");
+                exit();
+            }
+        }
+
+        $userData = $user->getUserById($id_user);
+        $content = VIEW_PATH . 'user/content-profile.php';
+        break;
+
+    case 'upload_profile_picture':
+        $id_user = $_SESSION['id_user'];
+        
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['profile_picture'])) {
+            $file = $_FILES['profile_picture'];
+            $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+            $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+            
+            if ($file['error'] !== UPLOAD_ERR_OK) {
+                $user->errors[] = "Error al subir el archivo.";
+            } elseif (!in_array($ext, $allowed)) {
+                $user->errors[] = "Solo se permiten imágenes (jpg, jpeg, png, gif, webp).";
+            } elseif ($file['size'] > 2 * 1024 * 1024) {
+                $user->errors[] = "La imagen no debe superar los 2MB.";
+            } else {
+                // Eliminar foto anterior si existe
+                $currentUser = $user->getUserById($id_user);
+                if (!empty($currentUser['profile_picture'])) {
+                    $oldFile = ASSETS_PATH . 'uploads/profiles/' . $currentUser['profile_picture'];
+                    if (file_exists($oldFile)) {
+                        unlink($oldFile);
+                    }
+                }
+
+                $filename = 'user_' . $id_user . '_' . time() . '.' . $ext;
+                $destination = ASSETS_PATH . 'uploads/profiles/' . $filename;
+                
+                if (move_uploaded_file($file['tmp_name'], $destination)) {
+                    if ($user->updateProfilePicture($id_user, $filename)) {
+                        $_SESSION['profile_picture'] = $filename;
+                        header("location: " . CONTROLLER_URL . "user/?action=profile&success=photo_updated");
+                        exit();
+                    }
+                } else {
+                    $user->errors[] = "Error al guardar la imagen.";
+                }
+            }
+            
+            // Si hay error, volver al perfil
+            $userData = $user->getUserById($id_user);
+            $content = VIEW_PATH . 'user/content-profile.php';
+        } else {
+            header("location: " . CONTROLLER_URL . "user/?action=profile");
+            exit();
+        }
+        break;
+
     case 'list':
         $users = $user->getAllUsers();
-        $pageTitle = 'Lista de usuarios';
-        $breadcrumb[] = ['name' => 'List', 'url' => ''];
+        $pageTitle = 'Lista de Usuarios';
+        $breadcrumb[] = ['name' => 'Lista', 'url' => ''];
         $content = VIEW_PATH . 'user/content-list.php';
         break;
         
@@ -57,8 +117,8 @@ switch ($action) {
         
     case 'edit':
         $id_user = isset($_GET['id']) ? $_GET['id'] : 0;
-        $pageTitle = 'Edit User';
-        $breadcrumb[] = ['name' => 'Edit', 'url' => ''];
+        $pageTitle = 'Editar Usuario';
+        $breadcrumb[] = ['name' => 'Editar', 'url' => ''];
         
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $username = $_POST['username'];
@@ -67,6 +127,10 @@ switch ($action) {
             $status = $_POST['status'];
             
             if ($user->updateUser($id_user, $username, $email, $id_rol, $status)) {
+                // Si el admin se editó a sí mismo, actualizar sesión
+                if ($id_user == $_SESSION['id_user']) {
+                    $_SESSION['user_name'] = $username;
+                }
                 header("location: " . CONTROLLER_URL . "user/?success=updated");
                 exit();
             }
@@ -99,8 +163,8 @@ switch ($action) {
         
     case 'change_password':
         $id_user = isset($_GET['id']) ? $_GET['id'] : 0;
-        $pageTitle = 'Change Password';
-        $breadcrumb[] = ['name' => 'Change Password', 'url' => ''];
+        $pageTitle = 'Cambiar Contraseña';
+        $breadcrumb[] = ['name' => 'Cambiar Contraseña', 'url' => ''];
         
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $new_password = $_POST['new_password'];

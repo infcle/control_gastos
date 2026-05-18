@@ -7,7 +7,7 @@
                 <!-- Page Title -->
                 <div>
                     <h4 class="page-title">
-                        <?php echo isset($pageTitle) ? htmlspecialchars($pageTitle) : 'Dashboard'; ?>
+                        <?php echo isset($pageTitle) ? htmlspecialchars($pageTitle) : 'Panel Principal'; ?>
                     </h4>
                     <p class="page-subtitle">
                         <?php
@@ -38,7 +38,7 @@
                             <?php endforeach; ?>
                         <?php else: ?>
                             <li class="breadcrumb-item active" aria-current="page">
-                                <span>Dashboard</span>
+                                <span>Panel Principal</span>
                             </li>
                         <?php endif; ?>
                     </ol>
