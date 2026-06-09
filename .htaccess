@@ -1,0 +1,11 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /control_gastos/
+
+    # No aplicar rewrite a archivos o directorios reales
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Todo al Front Controller
+    RewriteRule ^(.*)$ index.php?url=$1 [L,QSA]
+</IfModule>
