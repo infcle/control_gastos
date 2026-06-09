@@ -26,7 +26,7 @@
             <h5 class="mb-0">Nueva Compra</h5>
          </div>
          <div class="card-body">
-            <form method="post" action="<?php echo CONTROLLER_URL; ?>purchase/?action=create" id="purchaseForm" class="needs-validation" novalidate>
+            <form method="post" action="<?php echo BASE_URL; ?>purchase/create" id="purchaseForm" class="needs-validation" novalidate>
 
                <!-- Campos de cabecera -->
                <div class="row">
@@ -147,7 +147,7 @@
                            </i>
                            Registrar Compra
                         </button>
-                        <a href="<?php echo CONTROLLER_URL; ?>purchase/" class="btn btn-secondary ms-2">
+                        <a href="<?php echo BASE_URL; ?>purchase" class="btn btn-secondary ms-2">
                            <i class="me-2">
                               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                  <line x1="18" y1="6" x2="6" y2="18"/>

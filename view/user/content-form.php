@@ -16,7 +16,7 @@
             <h5 class="mb-0"><?php echo isset($userData) ? 'Editar Usuario' : 'Crear Nuevo Usuario'; ?></h5>
          </div>
          <div class="card-body">
-            <form method="post" action="<?php echo CONTROLLER_URL; ?>user/?action=<?php echo isset($userData) ? 'edit&id=' . $userData['id_user'] : 'create'; ?>" class="needs-validation" novalidate>
+            <form method="post" action="<?php echo BASE_URL; ?>user/<?php echo isset($userData) ? 'edit/' . $userData['id_user'] : 'create'; ?>" class="needs-validation" novalidate>
                <div class="row">
                   <div class="col-md-6">
                      <div class="form-group">
@@ -115,7 +115,7 @@
                            </i>
                            <?php echo isset($userData) ? 'Actualizar Usuario' : 'Crear Usuario'; ?>
                         </button>
-                        <a href="<?php echo CONTROLLER_URL; ?>user/" class="btn btn-secondary ms-2">
+                        <a href="<?php echo BASE_URL; ?>user" class="btn btn-secondary ms-2">
                            <i class="me-2">
                               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                  <line x1="18" y1="6" x2="6" y2="18"/>

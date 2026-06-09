@@ -16,7 +16,7 @@
             <h5 class="mb-0"><?php echo isset($categoryData) ? 'Editar Categoría' : 'Nueva Categoría'; ?></h5>
          </div>
          <div class="card-body">
-            <form method="post" action="<?php echo CONTROLLER_URL; ?>category/?action=<?php echo isset($categoryData) ? 'edit&id=' . $categoryData['id_category'] : 'create'; ?>" class="needs-validation" novalidate>
+            <form method="post" action="<?php echo BASE_URL; ?>category/<?php echo isset($categoryData) ? 'edit/' . $categoryData['id_category'] : 'create'; ?>" class="needs-validation" novalidate>
                <div class="row">
                   <div class="col-md-6">
                      <div class="form-group">
@@ -54,7 +54,7 @@
                            </i>
                            <?php echo isset($categoryData) ? 'Actualizar Categoría' : 'Crear Categoría'; ?>
                         </button>
-                        <a href="<?php echo CONTROLLER_URL; ?>category/" class="btn btn-secondary ms-2">
+                        <a href="<?php echo BASE_URL; ?>category" class="btn btn-secondary ms-2">
                            <i class="me-2">
                               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                  <line x1="18" y1="6" x2="6" y2="18"/>

@@ -42,7 +42,7 @@
       <h4 class="mb-1">Categorías</h4>
       <p class="text-muted mb-0">Gestión de categorías de productos</p>
    </div>
-   <a href="<?php echo CONTROLLER_URL; ?>category/?action=create" class="btn btn-primary">
+   <a href="<?php echo BASE_URL; ?>category/create" class="btn btn-primary">
       <i class="me-2">
          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <line x1="12" y1="5" x2="12" y2="19"/>
@@ -78,7 +78,7 @@
                         <td><?php echo htmlspecialchars($cat['description'] ?? ''); ?></td>
                         <td>
                            <div class="flex align-items-center list-user-action">
-                              <a class="btn btn-sm btn-icon btn-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar" href="<?php echo CONTROLLER_URL; ?>category/?action=edit&id=<?php echo $cat['id_category']; ?>">
+                              <a class="btn btn-sm btn-icon btn-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar" href="<?php echo BASE_URL; ?>category/edit/<?php echo $cat['id_category']; ?>">
                                  <span class="btn-inner">
                                     <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                        <path d="M11.4925 2.78906H7.75349C4.67849 2.78906 2.75049 4.96606 2.75049 8.04806V16.3621C2.75049 19.4441 4.66949 21.6211 7.75349 21.6211H16.5775C19.6625 21.6211 21.5815 19.4441 21.5815 16.3621V12.3341" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -87,7 +87,7 @@
                                     </svg>
                                  </span>
                               </a>
-                              <a class="btn btn-sm btn-icon btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar" href="#" onclick="if(confirm('¿Está seguro de eliminar esta categoría?')) { window.location.href='<?php echo CONTROLLER_URL; ?>category/?action=delete&id=<?php echo $cat['id_category']; ?>'; }">
+                              <a class="btn btn-sm btn-icon btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar" href="#" onclick="if(confirm('¿Está seguro de eliminar esta categoría?')) { window.location.href='<?php echo BASE_URL; ?>category/delete/<?php echo $cat['id_category']; ?>'; }">
                                  <span class="btn-inner">
                                     <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
                                        <path d="M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -104,7 +104,7 @@
                   <tr>
                      <td colspan="3" class="text-center py-4">
                         <p class="text-muted mb-0">No hay categorías registradas.</p>
-                        <a href="<?php echo CONTROLLER_URL; ?>category/?action=create" class="btn btn-primary btn-sm mt-2">
+                        <a href="<?php echo BASE_URL; ?>category/create" class="btn btn-primary btn-sm mt-2">
                            Crear Primera Categoría
                         </a>
                      </td>

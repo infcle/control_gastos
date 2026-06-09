@@ -40,8 +40,9 @@ return [
     'product/create'           => ['ProductController', 'createAction'],
     'product/edit/:id'         => ['ProductController', 'editAction'],
     'product/delete/:id'       => ['ProductController', 'deleteAction'],
-    'product/toggle-status/:id' => ['ProductController', 'toggleStatusAction'],
-    'product/price-history/:id' => ['ProductController', 'priceHistoryAction'],
+    'product/toggle-status/:id'   => ['ProductController', 'toggleStatusAction'],
+    'product/price-history/:id'   => ['ProductController', 'priceHistoryAction'],
+
 
     // Purchases
     'purchase'                 => ['PurchaseController', 'listAction'],

@@ -263,7 +263,7 @@
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="<?php echo CONTROLLER_URL; ?>login/?logout=1">Logout</a></li>
+                            <li><a class="dropdown-item" href="<?php echo BASE_URL; ?>login/logout">Logout</a></li>
                         </ul>
                     </li>
                 </ul>

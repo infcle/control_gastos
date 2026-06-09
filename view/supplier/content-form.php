@@ -16,7 +16,7 @@
             <h5 class="mb-0"><?php echo isset($supplierData) ? 'Editar Proveedor' : 'Nuevo Proveedor'; ?></h5>
          </div>
          <div class="card-body">
-            <form method="post" action="<?php echo CONTROLLER_URL; ?>supplier/?action=<?php echo isset($supplierData) ? 'edit&id=' . $supplierData['id_supplier'] : 'create'; ?>" class="needs-validation" novalidate>
+            <form method="post" action="<?php echo BASE_URL; ?>supplier/<?php echo isset($supplierData) ? 'edit/' . $supplierData['id_supplier'] : 'create'; ?>" class="needs-validation" novalidate>
                <div class="row">
                   <div class="col-md-6">
                      <div class="form-group">
@@ -54,7 +54,7 @@
                            </i>
                            <?php echo isset($supplierData) ? 'Actualizar Proveedor' : 'Crear Proveedor'; ?>
                         </button>
-                        <a href="<?php echo CONTROLLER_URL; ?>supplier/" class="btn btn-secondary ms-2">
+                        <a href="<?php echo BASE_URL; ?>supplier" class="btn btn-secondary ms-2">
                            <i class="me-2">
                               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                  <line x1="18" y1="6" x2="6" y2="18"/>

@@ -32,7 +32,7 @@
       <div class="card">
          <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0">Products List</h5>
-            <a href="<?php echo CONTROLLER_URL; ?>product/?action=create" class="btn btn-primary">
+            <a href="<?php echo BASE_URL; ?>product/create" class="btn btn-primary">
                <i class="me-2">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                      <line x1="12" y1="5" x2="12" y2="19"/>
@@ -95,11 +95,11 @@
                               <td><?php echo date('M d, Y', strtotime($product['created_at'])); ?></td>
                               <td>
                                  <div class="d-flex gap-1">
-                                    <a href="<?php echo CONTROLLER_URL; ?>product/?action=edit&id=<?php echo $product['id_product']; ?>" 
+                                    <a href="<?php echo BASE_URL; ?>product/edit/<?php echo $product['id_product']; ?>" 
                                        class="btn btn-sm btn-primary" title="Edit">
                                        <i class="bi bi-pencil"></i>
                                     </a>
-                                    <a href="<?php echo CONTROLLER_URL; ?>product/?action=price_history&id=<?php echo $product['id_product']; ?>" 
+                                    <a href="<?php echo BASE_URL; ?>product/price-history/<?php echo $product['id_product']; ?>" 
                                        class="btn btn-sm btn-info" title="Price History">
                                        <i class="bi bi-clock-history"></i>
                                     </a>
@@ -138,13 +138,13 @@
 <script>
 function toggleStatus(id) {
    if (confirm('Are you sure you want to toggle the status of this product?')) {
-      window.location.href = '<?php echo CONTROLLER_URL; ?>product/?action=toggle_status&id=' + id;
+      window.location.href = '<?php echo BASE_URL; ?>product/toggle-status/' + id;
    }
 }
 
 function deleteProduct(id) {
    if (confirm('Are you sure you want to delete this product? This action can be undone.')) {
-      window.location.href = '<?php echo CONTROLLER_URL; ?>product/?action=delete&id=' + id;
+      window.location.href = '<?php echo BASE_URL; ?>product/delete/' + id;
    }
 }
 </script>

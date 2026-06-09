@@ -17,7 +17,7 @@
             <p class="text-muted mb-0 mt-2">Usuario: <strong><?php echo htmlspecialchars($userData['username']); ?></strong></p>
          </div>
          <div class="card-body">
-            <form method="post" action="<?php echo CONTROLLER_URL; ?>user/?action=change_password&id=<?php echo $userData['id_user']; ?>" class="needs-validation" novalidate>
+            <form method="post" action="<?php echo BASE_URL; ?>user/change-password/<?php echo $userData['id_user']; ?>" class="needs-validation" novalidate>
                <div class="form-group">
                   <label for="new_password" class="form-label">Nueva Contraseña <span class="text-danger">*</span></label>
                   <input type="password" class="form-control" id="new_password" name="new_password" 
@@ -47,7 +47,7 @@
                      </i>
                      Cambiar Contraseña
                   </button>
-                  <a href="<?php echo CONTROLLER_URL; ?>user/" class="btn btn-secondary ms-2">
+                  <a href="<?php echo BASE_URL; ?>user" class="btn btn-secondary ms-2">
                      <i class="me-2">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                            <line x1="18" y1="6" x2="6" y2="18"/>

@@ -46,14 +46,14 @@ Chain strategy: pending
 
 ## Phase 3: Views & Cleanup
 
-- [ ] 3.1 Actualizar URLs en `view/user/content-list.php` y `content-form.php`
-- [ ] 3.2 Actualizar URLs en `view/category/content-list.php` y `content-form.php`
-- [ ] 3.3 Actualizar URLs en `view/supplier/content-list.php` y `content-form.php`
-- [ ] 3.4 Actualizar URLs en `view/product/content-list.php` y `content-form.php`
-- [ ] 3.5 Actualizar URLs en `view/purchase/content-list.php`, `content-form.php`, `content-view.php`
-- [ ] 3.6 Actualizar URLs en `view/template/partials/aside.php`, `nav-bar.php`, `breadcrumb.php`
-- [ ] 3.7 Eliminar archivos `controller/*/index.php` viejos
-- [ ] 3.8 Actualizar URLs en `tests/*.php`
+- [x] 3.1 Actualizar URLs en `view/user/content-list.php` y `content-form.php`
+- [x] 3.2 Actualizar URLs en `view/category/content-list.php` y `content-form.php`
+- [x] 3.3 Actualizar URLs en `view/supplier/content-list.php` y `content-form.php`
+- [x] 3.4 Actualizar URLs en `view/product/content-list.php` y `content-form.php`
+- [x] 3.5 Actualizar URLs en `view/purchase/content-list.php`, `content-form.php`, `content-view.php`
+- [x] 3.6 Actualizar URLs en `view/template/partials/aside.php`, `nav-bar.php`
+- [x] 3.7 Eliminar archivos `controller/*/index.php` viejos (7 archivos)
+- [x] 3.8 Actualizar URLs en `tests/*.php` (sin cambios necesarios — no usan CONTROLLER_URL)
 
 ## Phase 4: Verification
 

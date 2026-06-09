@@ -12,7 +12,7 @@
       <div class="card">
          <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0">Detalle de Compra #<?php echo $purchaseData['id_purchase']; ?></h5>
-            <a href="<?php echo CONTROLLER_URL; ?>purchase/" class="btn btn-secondary btn-sm">
+            <a href="<?php echo BASE_URL; ?>purchase" class="btn btn-secondary btn-sm">
                <i class="me-2">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                      <line x1="18" y1="6" x2="6" y2="18"/>
@@ -103,7 +103,7 @@
             </div>
 
             <div class="mt-3">
-               <a href="<?php echo CONTROLLER_URL; ?>purchase/?action=delete&id=<?php echo $purchaseData['id_purchase']; ?>" 
+               <a href="<?php echo BASE_URL; ?>purchase/delete/<?php echo $purchaseData['id_purchase']; ?>" 
                   class="btn btn-danger" 
                   onclick="return confirm('¿Está seguro de eliminar esta compra? Se eliminarán todos sus detalles.')">
                   <i class="me-2">
@@ -114,7 +114,7 @@
                   </i>
                   Eliminar Compra
                </a>
-               <a href="<?php echo CONTROLLER_URL; ?>purchase/" class="btn btn-secondary ms-2">
+               <a href="<?php echo BASE_URL; ?>purchase" class="btn btn-secondary ms-2">
                   Volver a Compras
                </a>
             </div>

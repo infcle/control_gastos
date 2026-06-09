@@ -17,7 +17,7 @@
          </div>
          <div class="card-body">
             <form method="post"
-                  action="<?php echo CONTROLLER_URL; ?>product/?action=<?php echo isset($productData) ? 'edit&id=' . htmlspecialchars($productData['id_product']) : 'create'; ?>"
+                  action="<?php echo BASE_URL; ?>product/<?php echo isset($productData) ? 'edit/' . htmlspecialchars($productData['id_product']) : 'create'; ?>"
                   class="needs-validation" novalidate>
 
                <?php if (isset($productData)): ?>
@@ -101,7 +101,7 @@
                            </i>
                            <?php echo isset($productData) ? 'Actualizar Producto' : 'Crear Producto'; ?>
                         </button>
-                        <a href="<?php echo CONTROLLER_URL; ?>product/?action=list" class="btn btn-secondary ms-2">
+                        <a href="<?php echo BASE_URL; ?>product" class="btn btn-secondary ms-2">
                            <i class="me-2">
                               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                  <line x1="18" y1="6" x2="6" y2="18"/>

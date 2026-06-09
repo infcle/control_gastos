@@ -41,7 +41,7 @@
       <h4 class="mb-1">Compras</h4>
       <p class="text-muted mb-0">Registro de compras realizadas</p>
    </div>
-   <a href="<?php echo CONTROLLER_URL; ?>purchase/?action=create" class="btn btn-primary">
+   <a href="<?php echo BASE_URL; ?>purchase/create" class="btn btn-primary">
       <i class="me-2">
          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <line x1="12" y1="5" x2="12" y2="19"/>
@@ -91,7 +91,7 @@
                         </td>
                         <td>
                            <div class="flex align-items-center list-user-action">
-                              <a class="btn btn-sm btn-icon btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Ver detalle" href="<?php echo CONTROLLER_URL; ?>purchase/?action=view&id=<?php echo $compra['id_purchase']; ?>">
+                              <a class="btn btn-sm btn-icon btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Ver detalle" href="<?php echo BASE_URL; ?>purchase/view/<?php echo $compra['id_purchase']; ?>">
                                  <span class="btn-inner">
                                     <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
                                        <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -99,7 +99,7 @@
                                     </svg>
                                  </span>
                               </a>
-                              <a class="btn btn-sm btn-icon btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar" href="#" onclick="if(confirm('¿Está seguro de eliminar esta compra? Se eliminarán todos sus detalles.')) { window.location.href='<?php echo CONTROLLER_URL; ?>purchase/?action=delete&id=<?php echo $compra['id_purchase']; ?>'; }">
+                              <a class="btn btn-sm btn-icon btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar" href="#" onclick="if(confirm('¿Está seguro de eliminar esta compra? Se eliminarán todos sus detalles.')) { window.location.href='<?php echo BASE_URL; ?>purchase/delete/<?php echo $compra['id_purchase']; ?>'; }">
                                  <span class="btn-inner">
                                     <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
                                        <path d="M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -116,7 +116,7 @@
                   <tr>
                      <td colspan="5" class="text-center py-4">
                         <p class="text-muted mb-0">No hay compras registradas.</p>
-                        <a href="<?php echo CONTROLLER_URL; ?>purchase/?action=create" class="btn btn-primary btn-sm mt-2">
+                        <a href="<?php echo BASE_URL; ?>purchase/create" class="btn btn-primary btn-sm mt-2">
                            Registrar Primera Compra
                         </a>
                      </td>
