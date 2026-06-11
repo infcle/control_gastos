@@ -41,8 +41,8 @@
 <!-- Page Header -->
 <div class="d-flex justify-content-between align-items-center mb-4">
    <div>
-      <h4 class="mb-1">Users Management</h4>
-      <p class="text-muted mb-0">Manage system users and their permissions</p>
+      <h4 class="mb-1">Gestión de Usuarios</h4>
+      <p class="text-muted mb-0">Administre los usuarios del sistema y sus permisos</p>
    </div>
    <a href="<?php echo CONTROLLER_URL; ?>user/?action=create" class="btn btn-primary">
       <i class="me-2">
@@ -59,7 +59,7 @@
 <div class="card">
    <div class="card-header d-flex justify-content-between">
       <div class="header-title">
-         <h4 class="card-title">User List</h4>
+          <h4 class="card-title">Lista de Usuarios</h4>
       </div>
    </div>
    <div class="card-body px-0">
@@ -67,21 +67,26 @@
          <table id="user-list-table" class="table table-striped" role="grid">
             <thead>
                <tr class="ligth">
-                  <th>Profile</th>
-                  <th>Username</th>
+                  <th>Perfil</th>
+                  <th>Usuario</th>
                   <th>Email</th>
-                  <th>Role</th>
-                  <th>Status</th>
-                  <th style="min-width: 200px">Action</th>
+                  <th>Rol</th>
+                  <th>Estado</th>
+                  <th style="min-width: 200px">Acción</th>
                </tr>
             </thead>
             <tbody>
                <?php if (!empty($users)): ?>
                   <?php foreach ($users as $user_item): ?>
                      <tr>
-                        <td class="text-center">
-                           <img class="bg-soft-primary rounded img-fluid avatar-40" src="<?php echo ASSETS_URL; ?>images/avatars/01.png" alt="profile">
-                        </td>
+                         <td class="text-center">
+                            <?php
+                            $upic = !empty($user_item['profile_picture'])
+                                ? ASSETS_URL . 'uploads/profiles/' . htmlspecialchars($user_item['profile_picture'])
+                                : ASSETS_URL . 'images/avatars/01.png';
+                            ?>
+                            <img class="bg-soft-primary rounded img-fluid avatar-40" src="<?php echo $upic; ?>" alt="profile" style="width:40px;height:40px;object-fit:cover;">
+                         </td>
                         <td><?php echo htmlspecialchars($user_item['username']); ?></td>
                         <td><?php echo htmlspecialchars($user_item['email']); ?></td>
                         <td>
@@ -91,12 +96,12 @@
                         </td>
                         <td>
                            <span class="badge bg-<?php echo $user_item['status'] == 1 ? 'success' : 'danger'; ?>">
-                              <?php echo $user_item['status'] == 1 ? 'Active' : 'Inactive'; ?>
+                               <?php echo $user_item['status'] == 1 ? 'Activo' : 'Inactivo'; ?>
                            </span>
                         </td>
                         <td>
                            <div class="flex align-items-center list-user-action">
-                              <a class="btn btn-sm btn-icon btn-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit" href="<?php echo CONTROLLER_URL; ?>user/?action=edit&id=<?php echo $user_item['id_user']; ?>">
+                                                             <a class="btn btn-sm btn-icon btn-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar" href="<?php echo CONTROLLER_URL; ?>user/?action=edit&id=<?php echo $user_item['id_user']; ?>">
                                  <span class="btn-inner">
                                     <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                        <path d="M11.4925 2.78906H7.75349C4.67849 2.78906 2.75049 4.96606 2.75049 8.04806V16.3621C2.75049 19.4441 4.66949 21.6211 7.75349 21.6211H16.5775C19.6625 21.6211 21.5815 19.4441 21.5815 16.3621V12.3341" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -106,7 +111,7 @@
                                  </span>
                               </a>
                               <?php if ($user_item['id_user'] != 1): ?>
-                                 <a class="btn btn-sm btn-icon btn-<?php echo $user_item['status'] == 1 ? 'secondary' : 'success'; ?>" data-bs-toggle="tooltip" data-bs-placement="top" title="<?php echo $user_item['status'] == 1 ? 'Deactivate' : 'Activate'; ?>" href="<?php echo CONTROLLER_URL; ?>user/?action=toggle_status&id=<?php echo $user_item['id_user']; ?>">
+                                                                   <a class="btn btn-sm btn-icon btn-<?php echo $user_item['status'] == 1 ? 'secondary' : 'success'; ?>" data-bs-toggle="tooltip" data-bs-placement="top" title="<?php echo $user_item['status'] == 1 ? 'Desactivar' : 'Activar'; ?>" href="<?php echo CONTROLLER_URL; ?>user/?action=toggle_status&id=<?php echo $user_item['id_user']; ?>">
                                     <span class="btn-inner">
                                        <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                           <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -114,7 +119,7 @@
                                        </svg>
                                     </span>
                                  </a>
-                                 <a class="btn btn-sm btn-icon btn-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Change Password" href="<?php echo CONTROLLER_URL; ?>user/?action=change_password&id=<?php echo $user_item['id_user']; ?>">
+                                                                   <a class="btn btn-sm btn-icon btn-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Cambiar Contraseña" href="<?php echo CONTROLLER_URL; ?>user/?action=change_password&id=<?php echo $user_item['id_user']; ?>">
                                     <span class="btn-inner">
                                        <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                           <path d="M18 7.5C18 5.01 15.99 3 13.5 3C11.01 3 9 5.01 9 7.5C9 8.34 9.23 9.12 9.63 9.79C8.73 10.36 8.13 11.35 8.13 12.5V20.5C8.13 22.16 9.47 23.5 11.13 23.5H15.87C17.53 23.5 18.87 22.16 18.87 20.5V12.5C18.87 11.35 18.27 10.36 17.37 9.79C17.77 9.12 18 8.34 18 7.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -122,7 +127,7 @@
                                        </svg>
                                     </span>
                                  </a>
-                                 <a class="btn btn-sm btn-icon btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" href="#" onclick="if(confirm('Are you sure you want to delete this user?')) { window.location.href='<?php echo CONTROLLER_URL; ?>user/?action=delete&id=<?php echo $user_item['id_user']; ?>'; }">
+                                  <a class="btn btn-sm btn-icon btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar" href="#" onclick="if(confirm('¿Está seguro de eliminar este usuario?')) { window.location.href='<?php echo CONTROLLER_URL; ?>user/?action=delete&id=<?php echo $user_item['id_user']; ?>'; }">
                                     <span class="btn-inner">
                                        <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
                                           <path d="M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -139,9 +144,9 @@
                <?php else: ?>
                   <tr>
                      <td colspan="6" class="text-center py-4">
-                        <p class="text-muted mb-0">No users found.</p>
+                         <p class="text-muted mb-0">No se encontraron usuarios.</p>
                         <a href="<?php echo CONTROLLER_URL; ?>user/?action=create" class="btn btn-primary btn-sm mt-2">
-                           Create First User
+                            Crear Primer Usuario
                         </a>
                      </td>
                   </tr>

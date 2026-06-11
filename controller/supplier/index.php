@@ -1,18 +1,7 @@
 <?php
 require_once __DIR__ . '/../../config/app_config.php';
-session_start();
-
-// Verificar si el usuario está logueado
-if (!isset($_SESSION['user_login_status']) || $_SESSION['user_login_status'] != 1) {
-    header("location: " . BASE_URL . "controller/login/");
-    exit();
-}
-
-// Verificar si el usuario tiene permisos (solo admin)
-if ($_SESSION['rol'] != 'Administrator') {
-    header("location: " . BASE_URL);
-    exit();
-}
+require_once CONFIG_PATH . 'auth_helper.php';
+requireAuthWithAction(isset($_GET['action']) ? $_GET['action'] : 'list', 'Administrator');
 
 require_once MODEL_PATH . 'supplier/Supplier.php';
 

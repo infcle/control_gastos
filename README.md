@@ -7,10 +7,13 @@ Sistema de control de gastos desarrollado en PHP puro con arquitectura MVC.
 - Login seguro con hash de contraseñas (bcrypt)
 - Arquitectura MVC (Modelo-Vista-Controlador)
 - Base de datos MySQL con migraciones versionadas
-- Gestión de roles y usuarios
-- CRUD de productos con historial de precios
-- Eliminación lógica (soft delete)
-- Interfaz moderna con Bootstrap 5
+- Gestión de roles (Administrator / User) y usuarios con foto de perfil
+- CRUD de productos con historial de precios y categorías
+- CRUD de categorías, proveedores y compras (con detalle por producto)
+- Eliminación lógica (soft delete) en todas las tablas
+- Control de acceso por URL mediante helper de autenticación
+- Interfaz moderna con Bootstrap 5 e iconos Bootstrap Icons
+- Perfil de usuario con foto, nombre y email
 
 ## 📋 Requisitos
 
@@ -29,10 +32,17 @@ Sistema de control de gastos desarrollado en PHP puro con arquitectura MVC.
 
 2. **Configurar base de datos**
 
-   Ejecutar los scripts SQL en orden:
+   Ejecutar los scripts SQL en orden cronológico (por fecha):
    ```bash
    mysql -u root -p < script_db/29_04_2026_create_tables.sql
    mysql -u root -p < script_db/07_05_2026_create_products_table.sql
+   mysql -u root -p < script_db/17_05_2026_create_categories.sql
+   mysql -u root -p < script_db/17_05_2026_create_suppliers.sql
+   mysql -u root -p < script_db/17_05_2026_fix_products_engine.sql
+   mysql -u root -p < script_db/17_05_2026_add_category_to_products.sql
+   mysql -u root -p < script_db/17_05_2026_create_purchases.sql
+   mysql -u root -p < script_db/17_05_2026_add_profile_picture.sql
+   mysql -u root -p < script_db/17_05_2026_remove_teacher_role.sql
    ```
 
 3. **Configurar credenciales**
@@ -52,7 +62,7 @@ Sistema de control de gastos desarrollado en PHP puro con arquitectura MVC.
 5. **Acceder al sistema**
    - URL: `http://localhost/control_gastos/controller/login/`
    - Usuario: `admin`
-   - Contraseña: `admin123`
+   - Contraseña: `password`
 
 ## 🗄️ Migraciones de Base de Datos
 
@@ -63,36 +73,67 @@ Deben ejecutarse en orden cronológico:
 |-------|---------|-------------|
 | 1 | `29_04_2026_create_tables.sql` | Crea la BD, tablas `roles` y `users`, e inserta datos iniciales |
 | 2 | `07_05_2026_create_products_table.sql` | Crea tablas `products` y `prices` |
+| 3 | `17_05_2026_create_categories.sql` | Crea tabla `categories` con soft delete |
+| 4 | `17_05_2026_create_suppliers.sql` | Crea tabla `suppliers` con soft delete |
+| 5 | `17_05_2026_fix_products_engine.sql` | Convierte `products` a InnoDB para FK |
+| 6 | `17_05_2026_add_category_to_products.sql` | Agrega `id_category` FK a `products` |
+| 7 | `17_05_2026_create_purchases.sql` | Crea tablas `purchases` y `purchase_details` |
+| 8 | `17_05_2026_add_profile_picture.sql` | Agrega campo `profile_picture` a `users` |
+| 9 | `17_05_2026_remove_teacher_role.sql` | Elimina rol Teacher, solo Admin y User |
 
 ## 📁 Estructura del Proyecto
 
 ```
 control_gastos/
 ├── config/
-│   ├── app_config.php          # Configuración de rutas y URLs
-│   └── database.php            # Configuración de base de datos
+│   ├── app_config.php              # Configuración de rutas y URLs
+│   ├── auth_helper.php             # Helper de autenticación y control de acceso
+│   └── database.php                # Configuración de base de datos
 ├── controller/
-│   ├── home/index.php
-│   ├── login/index.php         # Controlador de login
-│   ├── user/index.php          # Controlador de usuarios
-│   └── product/index.php       # Controlador de productos
+│   ├── home/index.php              # Dashboard
+│   ├── login/index.php             # Controlador de login
+│   ├── user/index.php              # CRUD de usuarios + perfil propio
+│   ├── product/index.php           # CRUD de productos + historial de precios
+│   ├── category/index.php          # CRUD de categorías
+│   ├── supplier/index.php          # CRUD de proveedores
+│   └── purchase/index.php          # CRUD de compras (transaccional)
 ├── model/
-│   ├── login/Login.php         # Modelo de login
-│   ├── user/User.php           # Modelo de usuarios
-│   └── product/Product.php     # Modelo de productos
+│   ├── login/Login.php             # Modelo de login
+│   ├── user/User.php               # Modelo de usuarios
+│   ├── product/Product.php         # Modelo de productos
+│   ├── category/Category.php       # Modelo de categorías
+│   ├── supplier/Supplier.php       # Modelo de proveedores
+│   └── purchase/Purchase.php       # Modelo de compras
 ├── view/
-│   ├── template/               # Layout y partials compartidos
-│   ├── user/                   # Vistas del módulo de usuarios
-│   ├── product/                # Vistas del módulo de productos
-│   └── assets/                 # CSS, JS, imágenes
-├── script_db/
-│   ├── 29_04_2026_create_tables.sql           # Migración 1: BD base
-│   └── 07_05_2026_create_products_table.sql   # Migración 2: productos
-├── tests/
-│   ├── LoginTest.php           # Tests del modelo de login
-│   ├── UserTest.php            # Tests del modelo de usuarios
-│   └── ProductTest.php         # Tests del modelo de productos
-└── index.php                   # Punto de entrada
+│   ├── template/                   # Layout y partials compartidos
+│   │   └── partials/
+│   │       ├── aside.php           # Sidebar con menú de navegación
+│   │       ├── nav-bar.php         # Navbar superior con perfil de usuario
+│   │       ├── breadcrumb.php      # Breadcrumb dinámico
+│   │       ├── head.php            # CSS y meta tags
+│   │       └── ...                 # Footer, scripts, etc.
+│   ├── user/                       # Vistas del módulo de usuarios
+│   │   ├── content-list.php        # Lista de usuarios
+│   │   ├── content-form.php        # Formulario crear/editar usuario
+│   │   ├── content-profile.php     # Perfil propio del usuario
+│   │   └── content-change-password.php
+│   ├── product/                    # Vistas del módulo de productos
+│   │   ├── content-list.php        # Lista de productos
+│   │   ├── content-form.php        # Formulario crear/editar producto
+│   │   └── content-price.php       # Historial de precios
+│   ├── category/                   # Vistas de categorías
+│   ├── supplier/                   # Vistas de proveedores
+│   ├── purchase/                   # Vistas de compras
+│   └── assets/                     # CSS, JS, imágenes, uploads
+├── script_db/                      # Migraciones SQL versionadas
+├── tests/                          # Tests unitarios (PHP CLI)
+│   ├── LoginTest.php
+│   ├── UserTest.php
+│   ├── ProductTest.php
+│   ├── CategoryTest.php
+│   ├── SupplierTest.php
+│   └── PurchaseTest.php
+└── index.php                       # Punto de entrada
 ```
 
 ## 🔐 Seguridad
@@ -100,13 +141,16 @@ control_gastos/
 - Contraseñas almacenadas con hash bcrypt (`password_hash`)
 - Valores SQL escapados con `real_escape_string`
 - Salidas HTML protegidas con `htmlspecialchars`
-- Sesiones con validación de rol en cada controlador
+- Helper de autenticación centralizado (`config/auth_helper.php`)
+- Control de acceso por URL: cada controller valida sesión y rol
+- Roles disponibles: **Administrator** (acceso total) y **User** (perfil propio)
+- Acciones de perfil propio (Mi Perfil, cambiar contraseña) accesibles sin ser admin
 
 ## 👤 Usuarios por Defecto
 
 | Usuario | Contraseña | Rol |
 |---------|------------|-----|
-| admin | admin123 | Administrator |
+| admin | password | Administrator |
 
 ## 🧪 Ejecutar Pruebas
 
@@ -116,6 +160,9 @@ Requiere PHP CLI y la base de datos `expense_db` configurada.
 php tests/LoginTest.php
 php tests/UserTest.php
 php tests/ProductTest.php
+php tests/CategoryTest.php
+php tests/SupplierTest.php
+php tests/PurchaseTest.php
 ```
 
 ## 📝 Licencia

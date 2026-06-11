@@ -1,11 +1,7 @@
 <?php
-require_once("../../config/app_config.php");
-session_start();
-if (!isset($_SESSION['user_login_status']) 
-    and $_SESSION['user_login_status'] != 1) {
-    header("location: " . CONTROLLER_URL . 'login/');
-    exit;
-}
+require_once __DIR__ . '/../../config/app_config.php';
+require_once CONFIG_PATH . 'auth_helper.php';
+requireAuth();
 
 $titulo = "Bienvenido";
 $contenido = "inicio.php";
